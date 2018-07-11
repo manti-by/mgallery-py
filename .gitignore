@@ -1,0 +1,11 @@
+#.gitignore
+
+.scannerwork/
+
+app/core/static/cache/
+app/core/settings/local.py
+app/db.sqlite3
+app/app.log
+
+*.pyc
+*~
