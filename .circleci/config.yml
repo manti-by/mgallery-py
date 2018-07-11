@@ -24,7 +24,9 @@ jobs:
           name: Run migrations
           command: alembic upgrade head
           working_directory: /srv/scanner/deploy/
+          environment:
+            DATABASE_URL: postgresql://mgallery:pa55word@localhost/mgallery
       - run:
           name: Run tests
-          command: python3 -m unittest discover -s app/tests/ -p '*_tests.py'
+          command: python -m unittest discover -s test/ -p 'test_*.py'
           working_directory: /srv/scanner/app/

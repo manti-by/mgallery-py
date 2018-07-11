@@ -39,7 +39,7 @@ class BaseService:
             .where(self.model.c.id == model_id).values(**kwargs)
         self.db.commit()
 
-        return model_instance.id
+        return model_id
 
     def get(self, **kwargs):
         return self.list(**kwargs).first()

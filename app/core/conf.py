@@ -2,8 +2,14 @@ import os
 
 settings = {
     'gallery': os.path.dirname(os.path.abspath(__file__)),
-    'database': 'postgresql://mgallery:pa55word@mgallery-postgres/mgallery',
-    'celery_broker': 'redis://mgallery-redis:6379/0',
+    'database': os.getenv(
+        'DATABASE_URL',
+        'postgresql://mgallery:pa55word@mgallery-postgres/mgallery'
+    ),
+    'celery_broker': os.getenv(
+        'REDIS_URL',
+        'redis://mgallery-redis:6379/0'
+    ),
     'logging': {
         'version': 1,
         'disable_existing_loggers': True,

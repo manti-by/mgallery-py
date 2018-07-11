@@ -9,7 +9,7 @@ Custom gallery engine with AI features.
 
 Author: Alexander Chaika <manti.by@gmail.com>
 
-Source link: https://github.com/manti-by/MGalleryScanner
+Source link: https://bitbucket.org/manti_by/mgallery/
 
 Requirements:
 
@@ -25,5 +25,5 @@ Docker setup
 2. Build app image and run
 
         $ cd deploy/ 
-        $ docker build -f Dockerfile -t mantiby/MGallery:latest .
+        $ docker build -f Dockerfile -t mantiby/mgallery:latest .
         $ docker-compose up

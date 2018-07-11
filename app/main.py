@@ -1,13 +1,9 @@
-#!/usr/bin/env python
-
-import os
 import argparse
 import logging
 import logging.config
 
 from core import version
 from core.conf import settings
-from core.celery import app as worker
 from core.scanner import Scanner
 
 
