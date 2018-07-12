@@ -24,3 +24,5 @@ services:
     volumes:
       - ../:/srv/mgallery/
       - ../../log/:/var/log/mgallery/
+    environment:
+      - DATABASE_URL=postgresql://mgallery:pa55word@mgallery-postgres/mgallery

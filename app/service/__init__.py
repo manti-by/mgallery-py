@@ -46,4 +46,4 @@ class BaseService:
 
     def list(self, **kwargs):
         return self.db \
-            .query(self.model).filter(**kwargs)
+            .query(self.model).filter_by(**kwargs)
