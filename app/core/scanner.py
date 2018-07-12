@@ -20,6 +20,7 @@ class Scanner:
             for x in self.gallery.list()
         }
 
+        # TODO: Add filters
         for r, rd, rf in os.walk(self.path):
             for current_directory in rd:
                 if current_directory not in gallery_list.keys():

@@ -9,11 +9,11 @@ Custom gallery engine with AI features.
 
 Author: Alexander Chaika <manti.by@gmail.com>
 
-Source link: https://bitbucket.org/manti_by/mgallery/
+Source link: https://github.com/manti-by/mgallery/
 
 Requirements:
 
-    Python 3+, PostgreSQL
+    Python 3+, PostgreSQL, Redis, Celery, DLib
 
 
 Docker setup

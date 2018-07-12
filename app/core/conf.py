@@ -1,14 +1,20 @@
 import os
 
+
+GALLERY_PATH = os.path.abspath(os.path.join(
+    os.path.abspath(__file__), '..', '..', '..', 'gallery'
+))
+
+
 settings = {
-    'gallery': os.path.dirname(os.path.abspath(__file__)),
+    'gallery': os.getenv(
+        'GALLERY_PATH', GALLERY_PATH
+    ),
     'database': os.getenv(
-        'DATABASE_URL',
-        'postgresql://mgallery:pa55word@mgallery-postgres/mgallery'
+        'DATABASE_URL', 'postgresql://mgallery:pa55word@mgallery-postgres/mgallery'
     ),
     'celery_broker': os.getenv(
-        'REDIS_URL',
-        'redis://mgallery-redis:6379/0'
+        'REDIS_URL', 'redis://mgallery-redis:6379/0'
     ),
     'logging': {
         'version': 1,
