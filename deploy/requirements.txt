@@ -12,5 +12,6 @@ pillow>=5.1.0,<5.2.0
 imagehash>=4.0,<5.0
 exifread>=2.1.0,<2.2.0
 
+pytest>=3.6.0
 ipython>=6.3.0
 flake8>=3.5.0

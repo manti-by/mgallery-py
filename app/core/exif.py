@@ -21,7 +21,7 @@ def get_exif_data(image):
     result = {
         'camera': get_camera(exif_data),
         'lens': get_lens(exif_data),
-        'position': get_lat_lon(exif_data),
+        'location': get_location(exif_data),
         'datetime': get_datetime(exif_data),
         'raw_data': exif_data
     }
@@ -68,7 +68,7 @@ def get_lens(exif_data):
         if result is not None else None
 
 
-def get_lat_lon(exif_data):
+def get_location(exif_data):
     lat = None
     lng = None
 

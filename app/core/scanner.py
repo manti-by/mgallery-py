@@ -1,6 +1,10 @@
 import os
 import logging
 
+from core.celery import (
+    process_gallery,
+    process_image
+)
 from service.gallery import GalleryService
 from service.image import ImageService
 
@@ -29,6 +33,7 @@ class Scanner:
 
                 if current_directory not in gallery_list.keys():
                     gallery_id = self.gallery.create(path=current_directory)
+                    process_gallery.delay(gallery_id)
                     logger.debug('Added gallery %s' % current_directory)
                 else:
                     gallery_id = gallery_list[current_directory]
@@ -45,7 +50,8 @@ class Scanner:
 
                         file_path = os.path.join(current_directory, current_file)
                         if file_path not in image_list.keys():
-                            self.image.create(path=file_path, gallery_id=gallery_id)
+                            image_id = self.image.create(path=file_path, gallery_id=gallery_id)
+                            process_image.delay(image_id)
                             logger.debug('Added image %s ' % current_file)
 
         logger.debug('Finish scanning')

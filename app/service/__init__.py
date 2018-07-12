@@ -32,14 +32,12 @@ class BaseService:
         if 'id' not in kwargs.keys():
             raise MissingRequiredField('Field id not set for %s' % self.__class__)
 
-        model_id = kwargs.get('id')
-        kwargs.pop('id')
+        model_instance = self.model(**kwargs)
 
-        self.db.update(self.model) \
-            .where(self.model.c.id == model_id).values(**kwargs)
+        self.db.merge(model_instance)
         self.db.commit()
 
-        return model_id
+        return kwargs.get('id')
 
     def get(self, **kwargs):
         return self.list(**kwargs).first()
