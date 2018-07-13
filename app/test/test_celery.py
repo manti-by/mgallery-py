@@ -2,6 +2,7 @@ from core.celery import (
     process_gallery,
     process_image
 )
+from core.conf import settings
 from service.gallery import GalleryService
 from service.image import ImageService
 
@@ -18,8 +19,15 @@ class TestCelery:
 
     def test_process_image(self):
         service = ImageService()
-        image_id = service.create(path='/2017 Весна/2017-03-05 Мерс/P70305-164500.jpg')
+        test_path = '%s%s' % (
+            settings['gallery'], '/2017 Весна/2017-03-05 Мерс/P70305-164500.jpg'
+        )
+        image_id = service.create(path=test_path)
         assert image_id is not None
 
         updated_image_id = process_image(image_id)
         assert image_id == updated_image_id
+
+        image = service.get(id=image_id)
+        assert image.phash is not None
+        assert image.camera is not None
