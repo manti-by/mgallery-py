@@ -38,6 +38,7 @@ class TestUtils:
 
     @pytest.mark.parametrize('path,expected', [
         ('/2009-2011 Ранние/2009-05-01 Test/DSC00144.jpeg', {
+            'name': 'DSC00144.jpeg',
             'camera': None,
             'lens': None,
             'location': None,
@@ -45,6 +46,7 @@ class TestUtils:
             'phash': '9f916066a759496d',
         }),
         ('/2017 Весна/2017-03-05 Мерс/P70305-164500.jpg', {
+            'name': 'P70305-164500.jpg',
             'camera': 'Meizu PRO 6',
             'lens': None,
             'location': '53.96010969444445, 27.538057305555558',
@@ -52,6 +54,7 @@ class TestUtils:
             'phash': 'edc1d22d05d03e8f',
         }),
         ('/2018 Весна/2018-05-05 Барселона/2018-05-08_12-14-46-56.jpg', {
+            'name': '2018-05-08_12-14-46-56.jpg',
             'camera': 'SONY SLT-A77V',
             'lens': 'DT 16-50mm F2.8 SSM',
             'location': '41.591363333333334, 1.8356766666666666',

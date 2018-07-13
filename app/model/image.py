@@ -9,6 +9,7 @@ class ImageModel(BaseModel):
     __tablename__ = 'image'
 
     path = Column(String)
+    name = Column(String)
     phash = Column(String)
 
     camera = Column(String)

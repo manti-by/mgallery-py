@@ -87,6 +87,7 @@ ALTER SEQUENCE public.gallery_id_seq OWNED BY public.gallery.id;
 CREATE TABLE public.image (
     id integer NOT NULL,
     path character varying,
+    name character varying,
     phash character varying,
     gallery_id integer,
     camera character varying,

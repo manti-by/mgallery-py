@@ -1,3 +1,4 @@
+import os
 import re
 import logging
 
@@ -44,6 +45,7 @@ def extract_gallery_data(path):
 
 def extract_image_data(path):
     result = {
+        'name': os.path.basename(path),
         'camera': None,
         'lens': None,
         'location': None,
