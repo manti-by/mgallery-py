@@ -53,10 +53,13 @@ def extract_image_data(path):
         'phash': None,
     }
 
+    image = Image.open(path)
     try:
-        image = Image.open(path)
         result['phash'] = str(phash(image))
+    except Exception as e:
+        logger.error(e)
 
+    try:
         exif_data = get_exif_data(image)
         result['camera'] = exif_data.get('camera')
         result['lens'] = exif_data.get('lens')

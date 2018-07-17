@@ -4,6 +4,7 @@ import logging.config
 
 from core import version
 from core.conf import settings
+from core.detector import Detector
 from core.scanner import Scanner
 
 
@@ -30,6 +31,10 @@ parser.add_argument('-s', '--scan',
                     dest='gallery', nargs='?', const=settings['gallery'],
                     help='Scan gallery for images')
 
+parser.add_argument('-d', '--detect',
+                    dest='image', nargs='?', const=settings['image'],
+                    help='Scan gallery for images')
+
 
 if __name__ == '__main__':
     args = parser.parse_args()
@@ -37,5 +42,8 @@ if __name__ == '__main__':
     if args.gallery is not None:
         scanner = Scanner(path=args.gallery)
         scanner.run()
+    elif args.image is not None:
+        detector = Detector(path=args.image)
+        detector.run()
     else:
         parser.print_help()
