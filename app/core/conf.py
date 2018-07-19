@@ -1,25 +1,25 @@
 import os
 
-GALLERY_PATH = os.getenv(
-    'GALLERY_PATH', os.path.abspath(os.path.join(
-        os.path.abspath(__file__), '..', '..', '..', 'gallery'
-    ))
-)
 
-PREDICTOR_PATH = os.getenv(
-    'PREDICTOR_PATH', os.path.abspath(os.path.join(
-        os.path.abspath(__file__), '..', '..', '..',
-        'deploy', 'conf', 'shape_predictor_68_face_landmarks.dat'
-    ))
-)
+def path_param(param, path):
+    return os.getenv(
+        param, os.path.abspath(os.path.join(
+            os.path.abspath(__file__), '..', '..', '..', path
+        ))
+    )
 
 
 settings = {
-    'gallery': GALLERY_PATH,
+    'gallery': path_param('GALLERY_PATH', 'gallery'),
     'image': os.path.join(
-        GALLERY_PATH, 'face-detection.jpg'
+        path_param('GALLERY_PATH', 'gallery'), 'face-detection.jpg'
     ),
-    'predictor': PREDICTOR_PATH,
+    'predictor': path_param(
+        'PREDICTOR_PATH', 'models/shape_predictor_68_face_landmarks.dat'
+    ),
+    'recognizer': path_param(
+        'RECOGNIZER_PATH', 'models/dlib_face_recognition_resnet_model_v1.dat'
+    ),
     'database': os.getenv(
         'DATABASE_URL', 'postgresql://mgallery:pa55word@mgallery-postgres/mgallery'
     ),

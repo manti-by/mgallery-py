@@ -19,3 +19,5 @@ class ImageModel(BaseModel):
 
     gallery_id = Column(Integer, ForeignKey('gallery.id'))
     gallery = relationship('GalleryModel', back_populates='images')
+
+    descriptors = relationship('DescriptorModel', back_populates='image')

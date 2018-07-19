@@ -45,6 +45,40 @@ CREATE TABLE public.alembic_version (
 ALTER TABLE public.alembic_version OWNER TO mgallery;
 
 --
+-- Name: descriptor; Type: TABLE; Schema: public; Owner: mgallery
+--
+
+CREATE TABLE public.descriptor (
+    id integer NOT NULL,
+    vector double precision[],
+    image_id integer
+);
+
+
+ALTER TABLE public.descriptor OWNER TO mgallery;
+
+--
+-- Name: descriptor_id_seq; Type: SEQUENCE; Schema: public; Owner: mgallery
+--
+
+CREATE SEQUENCE public.descriptor_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.descriptor_id_seq OWNER TO mgallery;
+
+--
+-- Name: descriptor_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: mgallery
+--
+
+ALTER SEQUENCE public.descriptor_id_seq OWNED BY public.descriptor.id;
+
+
+--
 -- Name: gallery; Type: TABLE; Schema: public; Owner: mgallery
 --
 
@@ -121,6 +155,13 @@ ALTER SEQUENCE public.image_id_seq OWNED BY public.image.id;
 
 
 --
+-- Name: descriptor id; Type: DEFAULT; Schema: public; Owner: mgallery
+--
+
+ALTER TABLE ONLY public.descriptor ALTER COLUMN id SET DEFAULT nextval('public.descriptor_id_seq'::regclass);
+
+
+--
 -- Name: gallery id; Type: DEFAULT; Schema: public; Owner: mgallery
 --
 
@@ -139,13 +180,15 @@ ALTER TABLE ONLY public.image ALTER COLUMN id SET DEFAULT nextval('public.image_
 --
 
 COPY public.alembic_version (version_num) FROM stdin;
-0fe7cf51bacc
+78654a971722
 \.
 
 
 --
--- Data for Name: gallery; Type: TABLE DATA; Schema: public; Owner: mgallery
+-- Name: descriptor_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mgallery
 --
+
+SELECT pg_catalog.setval('public.descriptor_id_seq', 1, false);
 
 
 --
@@ -153,11 +196,6 @@ COPY public.alembic_version (version_num) FROM stdin;
 --
 
 SELECT pg_catalog.setval('public.gallery_id_seq', 1, true);
-
-
---
--- Data for Name: image; Type: TABLE DATA; Schema: public; Owner: mgallery
---
 
 
 --
@@ -176,6 +214,14 @@ ALTER TABLE ONLY public.alembic_version
 
 
 --
+-- Name: descriptor descriptor_pkey; Type: CONSTRAINT; Schema: public; Owner: mgallery
+--
+
+ALTER TABLE ONLY public.descriptor
+    ADD CONSTRAINT descriptor_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: gallery gallery_pkey; Type: CONSTRAINT; Schema: public; Owner: mgallery
 --
 
@@ -189,6 +235,14 @@ ALTER TABLE ONLY public.gallery
 
 ALTER TABLE ONLY public.image
     ADD CONSTRAINT image_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: descriptor descriptor_image_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mgallery
+--
+
+ALTER TABLE ONLY public.descriptor
+    ADD CONSTRAINT descriptor_image_id_fkey FOREIGN KEY (image_id) REFERENCES public.image(id);
 
 
 --

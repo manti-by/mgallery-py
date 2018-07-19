@@ -7,10 +7,15 @@ from core.conf import settings
 logger = logging.getLogger()
 
 
+# In general, if two face descriptor vectors have a Euclidean
+# distance between them less than 0.6 then they are from the same
+# person, otherwise they are from different people.
+
 class Detector:
 
     detects = []
     landmarks = []
+    descriptors = []
 
     scores = []
     face_types = []
@@ -20,10 +25,10 @@ class Detector:
 
         self.detector = dlib.get_frontal_face_detector()
         self.predictor = dlib.shape_predictor(settings['predictor'])
+        self.recognizer = dlib.face_recognition_model_v1(settings['recognizer'])
 
         rgb_image = dlib.load_rgb_image(path)
-        grey_image = np.mean(rgb_image, -1)
-        self.image = grey_image.astype(np.uint8)
+        self.image = rgb_image
 
         self.debug = debug
         if self.debug:
@@ -47,11 +52,18 @@ class Detector:
             self.landmarks.append(landmark)
         logger.debug('Number of landmarks built: %d' % len(self.detects))
 
+    def build_face_descriptors(self):
+        for (i, rectangle) in enumerate(self.landmarks):
+            descriptor = self.recognizer.compute_face_descriptor(self.image, rectangle)
+            self.descriptors.append(descriptor)
+        logger.debug('Number of descriptors built: %d' % len(self.detects))
+
     def run(self):
         logger.debug('Start analyzing image %s' % self.path)
 
         self.detect_faces()
         self.build_landmarks()
+        self.build_face_descriptors()
 
         if self.debug:
             self.window.set_image(self.image)

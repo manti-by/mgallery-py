@@ -1,9 +1,11 @@
 import os
+import glob
 import logging
 
 from core.celery import (
     process_gallery,
-    process_image
+    process_image,
+    find_faces
 )
 from service.gallery import GalleryService
 from service.image import ImageService
@@ -18,6 +20,13 @@ class Scanner:
         self.gallery = GalleryService()
         self.image = ImageService()
 
+    @property
+    def file_list(self):
+        files = []
+        for ext in ['**/*.jpg', '**/*.jpeg', '**/*.png']:
+            files.extend(glob.glob(os.path.join(self.path, ext), recursive=True))
+        return files
+
     def run(self):
         logger.debug('Start scanning %s' % self.path)
 
@@ -25,33 +34,29 @@ class Scanner:
             x.path: x.id
             for x in self.gallery.list()
         }
-        for r, rd, rf in os.walk(self.path):
-            for current_directory in rd:
-                dir_name = os.path.dirname(current_directory)
-                if dir_name in ['__pycache__']:
-                    continue
+        for current_file in self.file_list:
+            current_directory = os.path.dirname(current_file)
+            if current_directory not in gallery_list.keys():
+                gallery_id = self.gallery.create(path=current_directory)
+                gallery_list[current_directory] = gallery_id
 
-                if current_directory not in gallery_list.keys():
-                    gallery_id = self.gallery.create(path=current_directory)
-                    process_gallery.delay(gallery_id)
-                    logger.debug('Added gallery %s' % current_directory)
-                else:
-                    gallery_id = gallery_list[current_directory]
+                process_gallery.delay(gallery_id)
 
-                image_list = {
-                    x.path: x.id
-                    for x in self.image.list(gallery_id=gallery_id)
-                }
-                for c, cd, cf in os.walk(os.path.join(r, current_directory)):
-                    for current_file in cf:
-                        file_name, file_ext = os.path.splitext(current_file)
-                        if file_ext not in ['.jpg', '.jpeg', '.png']:
-                            continue
+                logger.debug('Added gallery %s' % current_directory)
+            else:
+                gallery_id = gallery_list[current_directory]
 
-                        file_path = os.path.join(current_directory, current_file)
-                        if file_path not in image_list.keys():
-                            image_id = self.image.create(path=file_path, gallery_id=gallery_id)
-                            process_image.delay(image_id)
-                            logger.debug('Added image %s ' % current_file)
+            image_list = {
+                x.path: x.id
+                for x in self.image.list(gallery_id=gallery_id)
+            }
+            if current_file not in image_list.keys():
+                image_id = self.image.create(path=current_file, gallery_id=gallery_id)
+                image_list[current_file] = image_id
+
+                process_image.delay(image_id)
+                find_faces.delay(image_id)
+
+                logger.debug('Added image %s ' % current_file)
 
         logger.debug('Finish scanning')
