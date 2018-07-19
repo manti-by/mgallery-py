@@ -35,15 +35,19 @@ parser.add_argument('-d', '--detect',
                     dest='image', nargs='?', const=settings['image'],
                     help='Scan gallery for images')
 
+parser.add_argument('-w', '--window',
+                    action='count',
+                    help='Show result window')
+
 
 if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.gallery is not None:
-        scanner = Scanner(path=args.gallery)
+        scanner = Scanner(args.gallery)
         scanner.run()
     elif args.image is not None:
-        detector = Detector(path=args.image)
+        detector = Detector(args.image, args.window > 0)
         detector.run()
     else:
         parser.print_help()
