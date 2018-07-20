@@ -16,6 +16,7 @@ services:
     image: mantiby/mgallery:latest
     container_name: mgallery-app
     ports:
+      - "8000:8000"
       - "8888:8888"
       - "5555:5555"
     links:

@@ -2,6 +2,7 @@ import argparse
 import logging
 
 from core import version
+from core.admin import run_server
 from core.conf import settings
 from core.comparator import Comparator
 from core.detector import Detector
@@ -22,6 +23,10 @@ parser.add_argument('-c', '--compare',
 parser.add_argument('-d', '--detect',
                     dest='image', nargs='?', const=settings['image'],
                     help='Detect faces on image (use with -w option for visualisation)')
+
+parser.add_argument('-a', '--admin',
+                    action='store_true',
+                    help='Run admin panel')
 
 parser.add_argument('-s', '--scan',
                     dest='gallery', nargs='?', const=settings['gallery'],
@@ -70,5 +75,7 @@ if __name__ == '__main__':
 
         similar = find_similar(dt_1.descriptors, dt_2.descriptors)
         logger.info('Found %d similar faces' % len(list(similar)))
+    elif args.admin is not None:
+        run_server()
     else:
         parser.print_help()

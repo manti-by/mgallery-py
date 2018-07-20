@@ -1,6 +1,7 @@
 import uuid
 
 from celery import Celery
+from celery_once import QueueOnce
 
 from core.conf import settings
 from core.comparator import Comparator
@@ -16,6 +17,13 @@ from service.person import PersonService
 
 app = Celery()
 app.conf.broker_url = settings['celery_broker']
+app.conf.ONCE = {
+  'backend': 'celery_once.backends.Redis',
+  'settings': {
+      'url': settings['celery_broker'],
+      'default_timeout': 60
+  }
+}
 
 
 @app.task
@@ -55,7 +63,7 @@ def find_faces(image_id):
         return 'Cant find image with id %d' % image_id
 
 
-@app.task
+@app.task(base=QueueOnce)
 def compare_faces(descriptor_id):
     descriptor = DescriptorService().get(id=descriptor_id)
     if descriptor is not None:
