@@ -1,11 +1,13 @@
 import os
 import re
 import logging
+import logging.config
 
 from datetime import datetime
 from imagehash import phash
 from PIL import Image
 
+from core.conf import settings
 from core.exif import get_exif_data
 
 logger = logging.getLogger()
@@ -69,3 +71,17 @@ def extract_image_data(path):
         logger.error(e)
 
     return result
+
+
+def setup_logging(verbose_level):
+    try:
+        log_level = {
+            None: logging.ERROR,
+            0: logging.WARNING,
+            1: logging.INFO
+        }[verbose_level]
+    except KeyError:
+        log_level = logging.DEBUG
+
+    logging.basicConfig(level=log_level)
+    logging.config.dictConfig(settings['logging'])

@@ -7,20 +7,16 @@ from core.conf import settings
 logger = logging.getLogger()
 
 
-# In general, if two face descriptor vectors have a Euclidean
-# distance between them less than 0.6 then they are from the same
-# person, otherwise they are from different people.
-
 class Detector:
 
-    detects = []
-    landmarks = []
-    descriptors = []
-
-    scores = []
-    face_types = []
-
     def __init__(self, path, debug=False):
+        self.detects = []
+        self.landmarks = []
+        self.descriptors = []
+
+        self.scores = []
+        self.face_types = []
+
         self.path = path
 
         self.detector = dlib.get_frontal_face_detector()

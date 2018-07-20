@@ -30,6 +30,7 @@ from model import BaseModel
 from model.descriptor import DescriptorModel
 from model.gallery import GalleryModel
 from model.image import ImageModel
+from model.person import PersonModel
 
 target_metadata = BaseModel.metadata
 
