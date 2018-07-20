@@ -1,6 +1,3 @@
-import pytest
-from datetime import datetime
-
 from core.conf import settings
 from core.comparator import Comparator
 from core.detector import Detector

@@ -14,8 +14,8 @@ class TestCelery:
         gallery_id = service.create(path='/2009-2011 Ранние/2009-11-17')
         assert gallery_id is not None
 
-        updated_gallery_id = process_gallery(gallery_id)
-        assert gallery_id == updated_gallery_id
+        result = process_gallery(gallery_id)
+        assert result == 'Successfully processed gallery with id %d' % gallery_id
 
     def test_process_image(self):
         service = ImageService()
@@ -25,8 +25,8 @@ class TestCelery:
         image_id = service.create(path=test_path)
         assert image_id is not None
 
-        updated_image_id = process_image(image_id)
-        assert image_id == updated_image_id
+        result = process_image(image_id)
+        assert result == 'Successfully processed image with id %d' % image_id
 
         image = service.get(id=image_id)
         assert image.phash is not None

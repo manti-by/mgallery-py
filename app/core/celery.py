@@ -33,7 +33,7 @@ def process_gallery(gallery_id):
         data = extract_gallery_data(gallery.path)
         GalleryService().update(id=gallery.id, **data)
         return 'Successfully processed gallery with id %d' % gallery_id
-    return 'Cant find gallery with id %d' % image_id
+    return 'Cant find gallery with id %d' % gallery_id
 
 
 @app.task

@@ -8,7 +8,6 @@ from model.descriptor import DescriptorModel
 from model.gallery import GalleryModel
 from model.image import ImageModel
 from model.person import PersonModel
-from service.gallery import GalleryService
 
 
 app = Flask(__name__)
