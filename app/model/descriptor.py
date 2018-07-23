@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, ForeignKey, ARRAY,  Float
 from sqlalchemy.orm import relationship
 
-from model import BaseModel
+from model.base import BaseModel
 
 
 class DescriptorModel(BaseModel):

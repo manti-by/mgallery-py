@@ -4,10 +4,12 @@ from flask_admin.contrib.sqla import ModelView
 from flask_sqlalchemy import SQLAlchemy
 
 from core.conf import settings
-from model.descriptor import DescriptorModel
-from model.gallery import GalleryModel
-from model.image import ImageModel
-from model.person import PersonModel
+from model import (
+    DescriptorModel,
+    GalleryModel,
+    ImageModel,
+    PersonModel
+)
 
 
 app = Flask(__name__)

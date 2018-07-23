@@ -1,4 +1,4 @@
-from model.image import ImageModel
+from model import ImageModel
 from service import BaseService
 
 

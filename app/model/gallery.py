@@ -1,7 +1,7 @@
 from sqlalchemy import Column, String, Date, SmallInteger
 from sqlalchemy.orm import relationship
 
-from model import BaseModel
+from model.base import BaseModel
 
 
 class GalleryModel(BaseModel):

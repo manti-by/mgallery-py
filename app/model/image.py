@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
-from model import BaseModel
+from model.base import BaseModel
 
 
 class ImageModel(BaseModel):

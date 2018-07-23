@@ -1,7 +1,8 @@
 from sqlalchemy import func
 
-from model.gallery import GalleryModel
-from model.image import ImageModel
+from model import (
+    GalleryModel, ImageModel
+)
 from service import BaseService
 
 

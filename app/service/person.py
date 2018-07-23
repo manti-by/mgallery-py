@@ -1,4 +1,4 @@
-from model.person import PersonModel
+from model import PersonModel
 from service import BaseService
 
 

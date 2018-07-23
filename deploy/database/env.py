@@ -26,12 +26,7 @@ fileConfig(config.config_file_name)
 
 
 # Model's MetaData object
-from model import BaseModel
-from model.descriptor import DescriptorModel
-from model.gallery import GalleryModel
-from model.image import ImageModel
-from model.person import PersonModel
-
+from model import *
 target_metadata = BaseModel.metadata
 
 

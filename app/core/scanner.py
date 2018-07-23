@@ -7,8 +7,10 @@ from core.celery import (
     process_image,
     find_faces
 )
-from service.gallery import GalleryService
-from service.image import ImageService
+from service import (
+    GalleryService,
+    ImageService
+)
 
 logger = logging.getLogger()
 

@@ -1,4 +1,4 @@
-from model.descriptor import DescriptorModel
+from model import DescriptorModel
 from service import BaseService
 
 

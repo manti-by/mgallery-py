@@ -10,10 +10,12 @@ from core.utils import (
     extract_gallery_data,
     extract_image_data
 )
-from service.descriptor import DescriptorService
-from service.gallery import GalleryService
-from service.image import ImageService
-from service.person import PersonService
+from service import (
+    DescriptorService,
+    GalleryService,
+    ImageService,
+    PersonService
+)
 
 app = Celery()
 app.conf.broker_url = settings['celery_broker']
