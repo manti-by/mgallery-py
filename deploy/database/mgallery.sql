@@ -16,14 +16,14 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner:
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
 --
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner:
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
@@ -51,7 +51,8 @@ ALTER TABLE public.alembic_version OWNER TO mgallery;
 CREATE TABLE public.descriptor (
     id integer NOT NULL,
     vector double precision[],
-    image_id integer
+    image_id integer,
+    person_id integer
 );
 
 
@@ -155,6 +156,39 @@ ALTER SEQUENCE public.image_id_seq OWNED BY public.image.id;
 
 
 --
+-- Name: person; Type: TABLE; Schema: public; Owner: mgallery
+--
+
+CREATE TABLE public.person (
+    id integer NOT NULL,
+    name character varying
+);
+
+
+ALTER TABLE public.person OWNER TO mgallery;
+
+--
+-- Name: person_id_seq; Type: SEQUENCE; Schema: public; Owner: mgallery
+--
+
+CREATE SEQUENCE public.person_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.person_id_seq OWNER TO mgallery;
+
+--
+-- Name: person_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: mgallery
+--
+
+ALTER SEQUENCE public.person_id_seq OWNED BY public.person.id;
+
+
+--
 -- Name: descriptor id; Type: DEFAULT; Schema: public; Owner: mgallery
 --
 
@@ -176,11 +210,26 @@ ALTER TABLE ONLY public.image ALTER COLUMN id SET DEFAULT nextval('public.image_
 
 
 --
+-- Name: person id; Type: DEFAULT; Schema: public; Owner: mgallery
+--
+
+ALTER TABLE ONLY public.person ALTER COLUMN id SET DEFAULT nextval('public.person_id_seq'::regclass);
+
+
+--
 -- Data for Name: alembic_version; Type: TABLE DATA; Schema: public; Owner: mgallery
 --
 
 COPY public.alembic_version (version_num) FROM stdin;
-78654a971722
+497e808991cc
+\.
+
+
+--
+-- Data for Name: descriptor; Type: TABLE DATA; Schema: public; Owner: mgallery
+--
+
+COPY public.descriptor (id, vector, image_id, person_id) FROM stdin;
 \.
 
 
@@ -188,21 +237,52 @@ COPY public.alembic_version (version_num) FROM stdin;
 -- Name: descriptor_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mgallery
 --
 
-SELECT pg_catalog.setval('public.descriptor_id_seq', 1, false);
+SELECT pg_catalog.setval('public.descriptor_id_seq', 20, true);
+
+
+--
+-- Data for Name: gallery; Type: TABLE DATA; Schema: public; Owner: mgallery
+--
+
+COPY public.gallery (id, path, date, name, year) FROM stdin;
+\.
 
 
 --
 -- Name: gallery_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mgallery
 --
 
-SELECT pg_catalog.setval('public.gallery_id_seq', 1, true);
+SELECT pg_catalog.setval('public.gallery_id_seq', 11, true);
+
+
+--
+-- Data for Name: image; Type: TABLE DATA; Schema: public; Owner: mgallery
+--
+
+COPY public.image (id, path, name, phash, gallery_id, camera, datetime, lens, location) FROM stdin;
+\.
 
 
 --
 -- Name: image_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mgallery
 --
 
-SELECT pg_catalog.setval('public.image_id_seq', 1, true);
+SELECT pg_catalog.setval('public.image_id_seq', 11, true);
+
+
+--
+-- Data for Name: person; Type: TABLE DATA; Schema: public; Owner: mgallery
+--
+
+COPY public.person (id, name) FROM stdin;
+\.
+
+
+--
+-- Name: person_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mgallery
+--
+
+SELECT pg_catalog.setval('public.person_id_seq', 10, true);
 
 
 --
@@ -238,11 +318,27 @@ ALTER TABLE ONLY public.image
 
 
 --
+-- Name: person person_pkey; Type: CONSTRAINT; Schema: public; Owner: mgallery
+--
+
+ALTER TABLE ONLY public.person
+    ADD CONSTRAINT person_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: descriptor descriptor_image_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mgallery
 --
 
 ALTER TABLE ONLY public.descriptor
     ADD CONSTRAINT descriptor_image_id_fkey FOREIGN KEY (image_id) REFERENCES public.image(id);
+
+
+--
+-- Name: descriptor descriptor_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mgallery
+--
+
+ALTER TABLE ONLY public.descriptor
+    ADD CONSTRAINT descriptor_person_id_fkey FOREIGN KEY (person_id) REFERENCES public.person(id);
 
 
 --
@@ -256,3 +352,4 @@ ALTER TABLE ONLY public.image
 --
 -- PostgreSQL database dump complete
 --
+

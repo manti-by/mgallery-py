@@ -69,13 +69,8 @@ def find_faces(image_id):
 def compare_faces(descriptor_id):
     descriptor = DescriptorService().get(id=descriptor_id)
     if descriptor is not None:
-        # Trying to find similar descriptor and return its person
-        def find_person(dsc):
-            for personalized in DescriptorService().personalized():
-                if Comparator(dsc, personalized).is_similar:
-                    return personalized.person_id
-
-        person_id = find_person(descriptor)
+        comparator = Comparator(descriptor)
+        person_id = comparator.find_person()
         if person_id is None:
             person_id = PersonService().create(
                 name=uuid.uuid4().hex[:8]

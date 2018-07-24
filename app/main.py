@@ -2,11 +2,11 @@ import argparse
 import logging
 
 from core import version
-from core.admin import run_server
 from core.conf import settings
 from core.comparator import Comparator
 from core.detector import Detector
 from core.scanner import Scanner
+from core.server import run_server
 from core.utils import setup_logging
 
 
@@ -62,7 +62,7 @@ if __name__ == '__main__':
         def find_similar(dsc_list_1, dsc_list_2):
             for dsc_1 in dsc_list_1:
                 for dsc_2 in dsc_list_2:
-                    if Comparator.is_descriptors_similar(dsc_1, dsc_2):
+                    if Comparator.is_similar(dsc_1, dsc_2):
                         yield dsc_1, dsc_2
 
         logger.info('Checking similar faces on two images')

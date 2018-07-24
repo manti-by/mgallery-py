@@ -1,12 +1,14 @@
 import os
 
 
+def project_path(path):
+    return os.path.abspath(os.path.join(
+        os.path.abspath(__file__), '..', '..', '..', path
+    ))
+
+
 def path_param(param, path):
-    return os.getenv(
-        param, os.path.abspath(os.path.join(
-            os.path.abspath(__file__), '..', '..', '..', path
-        ))
-    )
+    return os.getenv(param, project_path(path))
 
 
 settings = {
@@ -22,6 +24,9 @@ settings = {
     ),
     'database': os.getenv(
         'DATABASE_URL', 'postgresql://mgallery:pa55word@mgallery-postgres/mgallery'
+    ),
+    'test_database': os.getenv(
+        'TEST_DATABASE_URL', 'postgresql://mgallery:pa55word@mgallery-postgres-test/mgallery'
     ),
     'celery_broker': os.getenv(
         'REDIS_URL', 'redis://mgallery-redis:6379/0'

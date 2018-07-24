@@ -1,20 +1,13 @@
-from flask import Flask
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-from flask_sqlalchemy import SQLAlchemy
 
-from core.conf import settings
+from core.app import app
 from model import (
     DescriptorModel,
     GalleryModel,
     ImageModel,
     PersonModel
 )
-
-
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = settings['database']
-db = SQLAlchemy(app)
 
 
 class GalleryView(ModelView):
@@ -42,9 +35,10 @@ MV_MAP = [
 
 
 def run_server():
+    app.config['SQLALCHEMY_DATABASE_URI'] = settings['database']
+
     admin = Admin(app)
     for model, view in MV_MAP:
-        admin.add_view(view(model, db.session))
+        admin.add_view(view(model, app.db.session))
 
-    db.create_all()
     app.run('0.0.0.0', 8000)

@@ -4,7 +4,7 @@ from service.image import ImageService
 
 class TestServices:
 
-    def test_gallery_service(self):
+    def test_gallery_service(self, session):
         test_path = '/2009-2011 Ранние/2009-11-17'
         service = GalleryService()
         gallery_id = service.create(path=test_path)
@@ -26,7 +26,7 @@ class TestServices:
         assert gallery.path == test_path
         assert gallery.name == test_name
 
-    def test_image_service(self):
+    def test_image_service(self, session):
         test_path = '/2017 Весна/2017-03-05 Мерс/P70305-164500.jpg'
         service = ImageService()
         image_id = service.create(path=test_path)

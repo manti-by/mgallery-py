@@ -1,14 +1,15 @@
 import numpy as np
 
+from service import DescriptorService
+
 
 class Comparator:
 
-    def __init__(self, descriptor, personalized):
+    def __init__(self, descriptor):
         self.descriptor = descriptor
-        self.personalized = personalized
 
     @staticmethod
-    def is_descriptors_similar(dsc_1, dsc_2):
+    def is_similar(dsc_1, dsc_2):
         """
         In general, if two face descriptor vectors have a Euclidean
         distance between them less than 0.6 then they are from the same
@@ -19,7 +20,8 @@ class Comparator:
         distance = np.linalg.norm(np_array_1 - np_array_2)
         return distance < 0.6
 
-    @property
-    def is_similar(self):
-        return self.is_descriptors_similar(self.descriptor.vector,
-                                           self.personalized.vector)
+    def find_person(self):
+        for personalized in DescriptorService().personalized():
+            if self.is_similar(self.descriptor.vector,
+                               personalized.vector):
+                return personalized.person_id

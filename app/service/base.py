@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+from core.app import app
 from core.conf import settings
 from service.exception import (
     MissingRequiredField,
@@ -16,15 +17,13 @@ class BaseService:
         if self.model is None:
             raise ModelNotSetException('Model not set for %s' % self.__class__)
 
-        self.db = sessionmaker(
-            bind=create_engine(settings['database'])
-        )()
+        self.session = app.db.session
 
     def create(self, **kwargs):
         model_instance = self.model(**kwargs)
 
-        self.db.add(model_instance)
-        self.db.commit()
+        self.session.add(model_instance)
+        self.session.commit()
 
         return model_instance.id
 
@@ -34,8 +33,8 @@ class BaseService:
 
         model_instance = self.model(**kwargs)
 
-        self.db.merge(model_instance)
-        self.db.commit()
+        self.session.merge(model_instance)
+        self.session.commit()
 
         return kwargs.get('id')
 
@@ -43,5 +42,5 @@ class BaseService:
         return self.list(**kwargs).first()
 
     def list(self, **kwargs):
-        return self.db \
+        return self.session \
             .query(self.model).filter_by(**kwargs)

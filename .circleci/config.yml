@@ -31,4 +31,4 @@ jobs:
           command: py.test
           working_directory: /srv/scanner/app/
           environment:
-            DATABASE_URL: postgresql://mgallery:pa55word@localhost/mgallery
+            TEST_DATABASE_URL: postgresql://mgallery:pa55word@localhost/mgallery
