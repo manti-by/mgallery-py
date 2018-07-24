@@ -1,8 +1,4 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-
 from core.app import app
-from core.conf import settings
 from service.exception import (
     MissingRequiredField,
     ModelNotSetException,
