@@ -2,11 +2,11 @@ import argparse
 import logging
 
 from core import version
+from core.admin import server
 from core.conf import settings
 from core.comparator import Comparator
 from core.detector import Detector
 from core.scanner import Scanner
-from core.server import run_server
 from core.utils import setup_logging
 
 
@@ -76,6 +76,6 @@ if __name__ == '__main__':
         similar = find_similar(dt_1.descriptors, dt_2.descriptors)
         logger.info('Found %d similar faces' % len(list(similar)))
     elif args.admin is not None:
-        run_server()
+        server()
     else:
         parser.print_help()

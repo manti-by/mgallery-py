@@ -1,11 +1,11 @@
-Gallery scanner with AI features
+Gallery with face recognition
 ====
 
 
 About
 ----
 
-Custom gallery engine with AI features.
+Custom gallery engine with face recognition features.
 
 [![CircleCI](https://circleci.com/gh/manti-by/mgallery.svg?style=shield)](https://circleci.com/gh/manti-by/mgallery)
 [![Docker](https://img.shields.io/docker/automated/mantiby/mgallery.svg)](https://hub.docker.com/r/mantiby/mgallery/)
@@ -31,3 +31,5 @@ Docker setup
         $ cd deploy/ 
         $ docker build -f Dockerfile -t mantiby/mgallery:latest .
         $ docker-compose up
+
+3. For additional commands check Makefile

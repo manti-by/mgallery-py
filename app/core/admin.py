@@ -1,4 +1,5 @@
-from flask_admin import Admin
+from flask_admin import Admin, AdminIndexView
+from flask_admin.menu import MenuLink
 from flask_admin.contrib.sqla import ModelView
 
 from core.app import app
@@ -12,19 +13,19 @@ from model import (
 
 
 class GalleryView(ModelView):
-    column_list = ('path',)
+    column_list = ('id', 'path',)
 
 
 class ImageView(ModelView):
-    column_list = ('gallery_id', 'name')
+    column_list = ('id', 'gallery_id', 'name')
 
 
 class DescriptorView(ModelView):
-    column_list = ('image_id', 'person_id')
+    column_list = ('id', 'image_id', 'person_id')
 
 
 class PersonView(ModelView):
-    column_list = ('name',)
+    column_list = ('id', 'name',)
 
 
 MV_MAP = [
@@ -35,11 +36,16 @@ MV_MAP = [
 ]
 
 
-def run_server():
+def server():
     app.config['SQLALCHEMY_DATABASE_URI'] = settings['database']
 
-    admin = Admin(app)
+    admin = Admin(app, index_view=AdminIndexView(url='/'))
+    admin.add_link(
+        MenuLink('Flower', url='http://localhost:5555')
+    )
+
     for model, view in MV_MAP:
         admin.add_view(view(model, app.db.session))
 
     app.run('0.0.0.0', 8000)
+    return app

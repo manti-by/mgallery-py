@@ -2,7 +2,7 @@ import logging
 import logging.config
 import pytest
 
-from core.app import app as flask_app
+from core.app import create_app
 from core.conf import settings
 from model import BaseModel
 
@@ -15,6 +15,7 @@ settings['database'] = settings['test_database']
 
 @pytest.fixture(scope='session')
 def app(request):
+    flask_app = create_app()
     context = flask_app.app_context()
     context.push()
 

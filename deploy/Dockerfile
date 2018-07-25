@@ -22,9 +22,7 @@ RUN pip3 install --trusted-host pypi.org --no-cache-dir -r /etc/mgallery/require
 
 # Setup supervisor
 
-COPY conf/uwsgi.ini /etc/mgallery/uwsgi.ini
-COPY conf/uwsgi_params /etc/mgallery/uwsgi_params
-COPY conf/supervisor.conf /etc/mgallery/supervisor.conf
+COPY supervisor.conf /etc/mgallery/supervisor.conf
 RUN ln -s /etc/mgallery/supervisor.conf /etc/supervisor/conf.d/mgallery.conf
 
 
