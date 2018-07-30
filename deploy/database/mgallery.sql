@@ -122,9 +122,9 @@ ALTER SEQUENCE public.gallery_id_seq OWNED BY public.gallery.id;
 CREATE TABLE public.image (
     id integer NOT NULL,
     path character varying,
-    name character varying,
     phash character varying,
     gallery_id integer,
+    name character varying,
     camera character varying,
     datetime timestamp without time zone,
     lens character varying,
@@ -191,6 +191,18 @@ ALTER SEQUENCE public.person_id_seq OWNED BY public.person.id;
 
 
 --
+-- Name: similar_image; Type: TABLE; Schema: public; Owner: mgallery
+--
+
+CREATE TABLE public.similar_image (
+    left_id integer,
+    right_id integer
+);
+
+
+ALTER TABLE public.similar_image OWNER TO mgallery;
+
+--
 -- Name: descriptor id; Type: DEFAULT; Schema: public; Owner: mgallery
 --
 
@@ -216,6 +228,83 @@ ALTER TABLE ONLY public.image ALTER COLUMN id SET DEFAULT nextval('public.image_
 --
 
 ALTER TABLE ONLY public.person ALTER COLUMN id SET DEFAULT nextval('public.person_id_seq'::regclass);
+
+
+--
+-- Data for Name: alembic_version; Type: TABLE DATA; Schema: public; Owner: mgallery
+--
+
+COPY public.alembic_version (version_num) FROM stdin;
+0b1f4a1b36a0
+\.
+
+
+--
+-- Data for Name: descriptor; Type: TABLE DATA; Schema: public; Owner: mgallery
+--
+
+COPY public.descriptor (id, vector, image_id, person_id) FROM stdin;
+\.
+
+
+--
+-- Name: descriptor_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mgallery
+--
+
+SELECT pg_catalog.setval('public.descriptor_id_seq', 1, false);
+
+
+--
+-- Data for Name: gallery; Type: TABLE DATA; Schema: public; Owner: mgallery
+--
+
+COPY public.gallery (id, path, date, name, year) FROM stdin;
+\.
+
+
+--
+-- Name: gallery_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mgallery
+--
+
+SELECT pg_catalog.setval('public.gallery_id_seq', 1, false);
+
+
+--
+-- Data for Name: image; Type: TABLE DATA; Schema: public; Owner: mgallery
+--
+
+COPY public.image (id, path, phash, gallery_id, name, camera, datetime, lens, location, height, width) FROM stdin;
+\.
+
+
+--
+-- Name: image_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mgallery
+--
+
+SELECT pg_catalog.setval('public.image_id_seq', 1, false);
+
+
+--
+-- Data for Name: person; Type: TABLE DATA; Schema: public; Owner: mgallery
+--
+
+COPY public.person (id, name) FROM stdin;
+\.
+
+
+--
+-- Name: person_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mgallery
+--
+
+SELECT pg_catalog.setval('public.person_id_seq', 1, false);
+
+
+--
+-- Data for Name: similar_image; Type: TABLE DATA; Schema: public; Owner: mgallery
+--
+
+COPY public.similar_image (left_id, right_id) FROM stdin;
+\.
 
 
 --
@@ -280,6 +369,22 @@ ALTER TABLE ONLY public.descriptor
 
 ALTER TABLE ONLY public.image
     ADD CONSTRAINT image_gallery_id_fkey FOREIGN KEY (gallery_id) REFERENCES public.gallery(id);
+
+
+--
+-- Name: similar_image similar_image_left_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mgallery
+--
+
+ALTER TABLE ONLY public.similar_image
+    ADD CONSTRAINT similar_image_left_id_fkey FOREIGN KEY (left_id) REFERENCES public.image(id);
+
+
+--
+-- Name: similar_image similar_image_right_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mgallery
+--
+
+ALTER TABLE ONLY public.similar_image
+    ADD CONSTRAINT similar_image_right_id_fkey FOREIGN KEY (right_id) REFERENCES public.image(id);
 
 
 --

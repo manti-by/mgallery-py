@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy import Table, Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
 from model.base import BaseModel
@@ -24,3 +24,10 @@ class ImageModel(BaseModel):
     gallery = relationship('GalleryModel', back_populates='images')
 
     descriptors = relationship('DescriptorModel', back_populates='image')
+
+
+association_table = Table(
+    'similar_image', BaseModel.metadata,
+    Column('left_id', Integer, ForeignKey('image.id')),
+    Column('right_id', Integer, ForeignKey('image.id'))
+)

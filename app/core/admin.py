@@ -36,7 +36,7 @@ MV_MAP = [
 ]
 
 
-def server():
+def run_server():
     app.config['SQLALCHEMY_DATABASE_URI'] = settings['database']
 
     admin = Admin(app, index_view=AdminIndexView(url='/'))

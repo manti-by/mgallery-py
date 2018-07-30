@@ -1,8 +1,8 @@
 docker_compose_up:
 	@docker-compose -f deploy/docker-compose.yml up -d
 	@printf "Waiting for PostgreSQL."
-	@until docker exec -it mgallery-postgres psql -U mgallery -c '\l' > /dev/null; do @printf "."; sleep 1; done
-	@until docker exec -it mgallery-postgres-test psql -U mgallery -c '\l' > /dev/null; do @printf "."; sleep 1; done
+	@until docker exec -it mgallery-postgres psql -U mgallery -c '\l' > /dev/null; do printf "."; sleep 1; done
+	@until docker exec -it mgallery-postgres-test psql -U mgallery -c '\l' > /dev/null; do printf "."; sleep 1; done
 	@printf " Connected!\n"
 
 docker_compose_down:
@@ -17,7 +17,12 @@ test: docker_compose_up make_test docker_compose_down
 
 admin:
 	docker exec -it mgallery-app python main.py -a
-	docker_compose_down
+
+compare:
+	docker exec -it mgallery-app python main.py -c
+
+merge:
+	docker exec -it mgallery-app python main.py -m
 
 search:
 	docker exec -it mgallery-app python main.py -s
@@ -54,7 +59,7 @@ psql-test:
 	docker exec -it mgallery-postgres-test psql -U mgallery
 
 pg_dump:
-	docker exec -it mgallery-postgres pg_dump -s -U mgallery -d mgallery > database/mgallery.sql
+	docker exec -it mgallery-postgres pg_dump -U mgallery -d mgallery > deploy/database/mgallery.sql
 
 migrate:
 	docker exec -it mgallery-app bash -c "cd ../deploy && alembic upgrade head"

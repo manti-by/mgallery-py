@@ -1,7 +1,6 @@
 import uuid
 
 from celery import Celery
-from celery_once import QueueOnce
 
 from core.conf import settings
 from core.comparator import Comparator
@@ -60,16 +59,28 @@ def find_faces(image_id):
         detector = Detector(image.path)
         detector.run()
         for descriptor in detector.descriptors:
-            descriptor_id = DescriptorService().create(image_id=image.id,
-                                                       vector=list(descriptor))
-            compare_faces.delay(descriptor_id)
+            DescriptorService().create(image_id=image.id,
+                                       vector=list(descriptor))
             descriptors.append(descriptors)
         return 'Successfully found %d faces for image %d' % (len(descriptors), image_id)
     else:
         return 'Cant find image with id %d' % image_id
 
 
-@app.task(base=QueueOnce)
+@app.task
+def find_duplicates(image_id):
+    duplicates = []
+    image = ImageService().get(id=image_id)
+    if image is not None:
+        for duplicate in ImageService().list():
+            if image.phash == duplicate.phash:
+                duplicates.append(duplicate.id)
+        return 'Successfully found %d duplicates for image %d' % (len(duplicates), image_id)
+    else:
+        return 'Cant find image with id %d' % image_id
+
+
+@app.task
 def compare_faces(descriptor_id):
     descriptor = DescriptorService().get(id=descriptor_id)
     if descriptor is not None:
