@@ -23,6 +23,7 @@ def get_exif_data(image):
         'lens': get_lens(exif_data),
         'location': get_location(exif_data),
         'datetime': get_datetime(exif_data),
+        'dimensions': get_dimensions(exif_data, image),
         'raw_data': exif_data
     }
     return result
@@ -32,6 +33,14 @@ def get_datetime(exif_data):
     return datetime.strptime(
         str(exif_data.get('DateTimeOriginal')), '%Y:%m:%d %H:%M:%S'
     )
+
+
+def get_dimensions(exif_data, image):
+    width, height = image.size
+    if width is None or height is None:
+        width = exif_data.get('ExifImageWidth')
+        height = exif_data.get('ExifImageHeight')
+    return width, height
 
 
 def get_camera(exif_data):

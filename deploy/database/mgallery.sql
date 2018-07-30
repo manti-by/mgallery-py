@@ -128,7 +128,9 @@ CREATE TABLE public.image (
     camera character varying,
     datetime timestamp without time zone,
     lens character varying,
-    location character varying
+    location character varying,
+    height integer,
+    width integer
 );
 
 
@@ -214,75 +216,6 @@ ALTER TABLE ONLY public.image ALTER COLUMN id SET DEFAULT nextval('public.image_
 --
 
 ALTER TABLE ONLY public.person ALTER COLUMN id SET DEFAULT nextval('public.person_id_seq'::regclass);
-
-
---
--- Data for Name: alembic_version; Type: TABLE DATA; Schema: public; Owner: mgallery
---
-
-COPY public.alembic_version (version_num) FROM stdin;
-497e808991cc
-\.
-
-
---
--- Data for Name: descriptor; Type: TABLE DATA; Schema: public; Owner: mgallery
---
-
-COPY public.descriptor (id, vector, image_id, person_id) FROM stdin;
-\.
-
-
---
--- Name: descriptor_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mgallery
---
-
-SELECT pg_catalog.setval('public.descriptor_id_seq', 20, true);
-
-
---
--- Data for Name: gallery; Type: TABLE DATA; Schema: public; Owner: mgallery
---
-
-COPY public.gallery (id, path, date, name, year) FROM stdin;
-\.
-
-
---
--- Name: gallery_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mgallery
---
-
-SELECT pg_catalog.setval('public.gallery_id_seq', 11, true);
-
-
---
--- Data for Name: image; Type: TABLE DATA; Schema: public; Owner: mgallery
---
-
-COPY public.image (id, path, name, phash, gallery_id, camera, datetime, lens, location) FROM stdin;
-\.
-
-
---
--- Name: image_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mgallery
---
-
-SELECT pg_catalog.setval('public.image_id_seq', 11, true);
-
-
---
--- Data for Name: person; Type: TABLE DATA; Schema: public; Owner: mgallery
---
-
-COPY public.person (id, name) FROM stdin;
-\.
-
-
---
--- Name: person_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mgallery
---
-
-SELECT pg_catalog.setval('public.person_id_seq', 10, true);
 
 
 --

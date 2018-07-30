@@ -43,6 +43,7 @@ class TestUtils:
             'lens': None,
             'location': None,
             'datetime': None,
+            'dimensions': None,
             'phash': '9f916066a759496d',
         }),
         ('/2017 Весна/2017-03-05 Мерс/P70305-164500.jpg', {
@@ -51,6 +52,7 @@ class TestUtils:
             'lens': None,
             'location': '53.96010969444445, 27.538057305555558',
             'datetime': datetime.strptime('2017-03-05 16:45:02', '%Y-%m-%d %H:%M:%S'),
+            'dimensions': (5312, 2992),
             'phash': 'edc1d22d05d03e8f',
         }),
         ('/2018 Весна/2018-05-05 Барселона/2018-05-08_12-14-46-56.jpg', {
@@ -59,6 +61,7 @@ class TestUtils:
             'lens': 'DT 16-50mm F2.8 SSM',
             'location': '41.591363333333334, 1.8356766666666666',
             'datetime': datetime.strptime('2018-05-08 12:14:46', '%Y-%m-%d %H:%M:%S'),
+            'dimensions': (1920, 1280),
             'phash': 'cc87cdc4d678b922',
         }),
     ])

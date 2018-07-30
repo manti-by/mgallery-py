@@ -17,6 +17,9 @@ class ImageModel(BaseModel):
     datetime = Column(DateTime)
     location = Column(String)
 
+    width = Column(Integer)
+    height = Column(Integer)
+
     gallery_id = Column(Integer, ForeignKey('gallery.id'))
     gallery = relationship('GalleryModel', back_populates='images')
 

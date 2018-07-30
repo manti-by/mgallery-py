@@ -1,5 +1,23 @@
+docker_compose_up:
+	@docker-compose -f deploy/docker-compose.yml up -d
+	@printf "Waiting for PostgreSQL."
+	@until docker exec -it mgallery-postgres psql -U mgallery -c '\l' > /dev/null; do @printf "."; sleep 1; done
+	@until docker exec -it mgallery-postgres-test psql -U mgallery -c '\l' > /dev/null; do @printf "."; sleep 1; done
+	@printf " Connected!\n"
+
+docker_compose_down:
+	@docker-compose -f deploy/docker-compose.yml down
+
+
+make_test:
+	@docker exec -it mgallery-app pytest
+
+test: docker_compose_up make_test docker_compose_down
+
+
 admin:
 	docker exec -it mgallery-app python main.py -a
+	docker_compose_down
 
 search:
 	docker exec -it mgallery-app python main.py -s
@@ -21,14 +39,11 @@ bash:
 ci:
 	circleci build
 
-test:
-	docker exec -it mgallery-app pytest
-
 flake:
 	flake8
 
 build:
-	cd deploy/ && docker build -f Dockerfile -t mantiby/mgallery:latest .
+	cd deploy/ && docker build -t mantiby/mgallery:latest .
 
 
 
@@ -39,7 +54,10 @@ psql-test:
 	docker exec -it mgallery-postgres-test psql -U mgallery
 
 pg_dump:
-	docker exec -it mgallery-postgres pg_dump -U mgallery -d mgallery > deploy/database/mgallery.sql
+	docker exec -it mgallery-postgres pg_dump -s -U mgallery -d mgallery > database/mgallery.sql
 
 migrate:
-	docker exec -it mgallery-app cd ../deploy && alembic upgrade head
+	docker exec -it mgallery-app bash -c "cd ../deploy && alembic upgrade head"
+
+makemigrations:
+	docker exec -it mgallery-app bash -c "cd ../deploy && alembic revision --autogenerate"

@@ -43,6 +43,10 @@ def process_image(image_id):
     image = ImageService().get(id=image_id)
     if image is not None:
         data = extract_image_data(image.path)
+        dimensions = data.pop('dimensions')
+        if dimensions is not None:
+            data['width'] = dimensions[0]
+            data['height'] = dimensions[1]
         ImageService().update(id=image.id, **data)
         return 'Successfully processed image with id %d' % image_id
     return 'Cant find image with id %d' % image_id

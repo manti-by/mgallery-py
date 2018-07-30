@@ -52,6 +52,7 @@ def extract_image_data(path):
         'lens': None,
         'location': None,
         'datetime': None,
+        'dimensions': None,
         'phash': None,
     }
 
@@ -67,6 +68,7 @@ def extract_image_data(path):
         result['lens'] = exif_data.get('lens')
         result['location'] = exif_data.get('location')
         result['datetime'] = exif_data.get('datetime')
+        result['dimensions'] = exif_data.get('dimensions')
     except Exception as e:
         logger.error(e)
 
