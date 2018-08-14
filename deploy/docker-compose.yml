@@ -34,6 +34,7 @@ services:
     volumes:
       - ../:/srv/mgallery/
       - ../../log/:/var/log/mgallery/
+      - /media/manti/data/Junkyard/Viber/Images:/viber
     environment:
       - DATABASE_URL=postgresql://mgallery:pa55word@mgallery-postgres/mgallery
       - TEST_DATABASE_URL=postgresql://mgallery:pa55word@mgallery-postgres-test/mgallery

@@ -158,6 +158,18 @@ ALTER SEQUENCE public.image_id_seq OWNED BY public.image.id;
 
 
 --
+-- Name: image_to_image; Type: TABLE; Schema: public; Owner: mgallery
+--
+
+CREATE TABLE public.image_to_image (
+    left_id integer NOT NULL,
+    right_id integer NOT NULL
+);
+
+
+ALTER TABLE public.image_to_image OWNER TO mgallery;
+
+--
 -- Name: person; Type: TABLE; Schema: public; Owner: mgallery
 --
 
@@ -189,18 +201,6 @@ ALTER TABLE public.person_id_seq OWNER TO mgallery;
 
 ALTER SEQUENCE public.person_id_seq OWNED BY public.person.id;
 
-
---
--- Name: similar_image; Type: TABLE; Schema: public; Owner: mgallery
---
-
-CREATE TABLE public.similar_image (
-    left_id integer,
-    right_id integer
-);
-
-
-ALTER TABLE public.similar_image OWNER TO mgallery;
 
 --
 -- Name: descriptor id; Type: DEFAULT; Schema: public; Owner: mgallery
@@ -235,7 +235,7 @@ ALTER TABLE ONLY public.person ALTER COLUMN id SET DEFAULT nextval('public.perso
 --
 
 COPY public.alembic_version (version_num) FROM stdin;
-0b1f4a1b36a0
+5628f67a9a63
 \.
 
 
@@ -285,6 +285,14 @@ SELECT pg_catalog.setval('public.image_id_seq', 1, false);
 
 
 --
+-- Data for Name: image_to_image; Type: TABLE DATA; Schema: public; Owner: mgallery
+--
+
+COPY public.image_to_image (left_id, right_id) FROM stdin;
+\.
+
+
+--
 -- Data for Name: person; Type: TABLE DATA; Schema: public; Owner: mgallery
 --
 
@@ -297,14 +305,6 @@ COPY public.person (id, name) FROM stdin;
 --
 
 SELECT pg_catalog.setval('public.person_id_seq', 1, false);
-
-
---
--- Data for Name: similar_image; Type: TABLE DATA; Schema: public; Owner: mgallery
---
-
-COPY public.similar_image (left_id, right_id) FROM stdin;
-\.
 
 
 --
@@ -340,6 +340,14 @@ ALTER TABLE ONLY public.image
 
 
 --
+-- Name: image_to_image image_to_image_pkey; Type: CONSTRAINT; Schema: public; Owner: mgallery
+--
+
+ALTER TABLE ONLY public.image_to_image
+    ADD CONSTRAINT image_to_image_pkey PRIMARY KEY (left_id, right_id);
+
+
+--
 -- Name: person person_pkey; Type: CONSTRAINT; Schema: public; Owner: mgallery
 --
 
@@ -372,19 +380,19 @@ ALTER TABLE ONLY public.image
 
 
 --
--- Name: similar_image similar_image_left_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mgallery
+-- Name: image_to_image image_to_image_left_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mgallery
 --
 
-ALTER TABLE ONLY public.similar_image
-    ADD CONSTRAINT similar_image_left_id_fkey FOREIGN KEY (left_id) REFERENCES public.image(id);
+ALTER TABLE ONLY public.image_to_image
+    ADD CONSTRAINT image_to_image_left_id_fkey FOREIGN KEY (left_id) REFERENCES public.image(id);
 
 
 --
--- Name: similar_image similar_image_right_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mgallery
+-- Name: image_to_image image_to_image_right_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mgallery
 --
 
-ALTER TABLE ONLY public.similar_image
-    ADD CONSTRAINT similar_image_right_id_fkey FOREIGN KEY (right_id) REFERENCES public.image(id);
+ALTER TABLE ONLY public.image_to_image
+    ADD CONSTRAINT image_to_image_right_id_fkey FOREIGN KEY (right_id) REFERENCES public.image(id);
 
 
 --

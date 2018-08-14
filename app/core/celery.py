@@ -69,13 +69,14 @@ def find_faces(image_id):
 
 @app.task
 def find_duplicates(image_id):
-    duplicates = []
+    duplicates = 0
     image = ImageService().get(id=image_id)
     if image is not None:
         for duplicate in ImageService().list():
-            if image.phash == duplicate.phash:
-                duplicates.append(duplicate.id)
-        return 'Successfully found %d duplicates for image %d' % (len(duplicates), image_id)
+            if image.phash == duplicate.phash and image.id != duplicate.id:
+                image.similar.append(duplicate)
+                duplicates += 1
+        return 'Successfully found %d duplicates for image %d' % (duplicates, image_id)
     else:
         return 'Cant find image with id %d' % image_id
 

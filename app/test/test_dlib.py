@@ -11,7 +11,7 @@ from service import (
 )
 
 
-class TestDlibUtils:
+class TestDlib:
 
     @staticmethod
     def find_similar(dsc_list_1, dsc_list_2):

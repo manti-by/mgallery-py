@@ -13,9 +13,6 @@ def path_param(param, path):
 
 settings = {
     'gallery': path_param('GALLERY_PATH', 'gallery'),
-    'image': os.path.join(
-        path_param('GALLERY_PATH', 'gallery'), 'face-detection.jpg'
-    ),
     'predictor': path_param(
         'PREDICTOR_PATH', 'models/shape_predictor_68_face_landmarks.dat'
     ),

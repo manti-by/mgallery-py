@@ -13,11 +13,11 @@ from model import (
 
 
 class GalleryView(ModelView):
-    column_list = ('id', 'path',)
+    column_list = ('id', 'path')
 
 
 class ImageView(ModelView):
-    column_list = ('id', 'gallery_id', 'name')
+    column_list = ('id', 'gallery_id', 'path', 'similar')
 
 
 class DescriptorView(ModelView):
@@ -25,7 +25,7 @@ class DescriptorView(ModelView):
 
 
 class PersonView(ModelView):
-    column_list = ('id', 'name',)
+    column_list = ('id', 'name')
 
 
 MV_MAP = [

@@ -4,6 +4,13 @@ from sqlalchemy.orm import relationship
 from model.base import BaseModel
 
 
+image_to_image = Table(
+    'image_to_image', BaseModel.metadata,
+    Column('left_id', Integer, ForeignKey('image.id'), primary_key=True),
+    Column('right_id', Integer, ForeignKey('image.id'), primary_key=True)
+)
+
+
 class ImageModel(BaseModel):
 
     __tablename__ = 'image'
@@ -25,9 +32,7 @@ class ImageModel(BaseModel):
 
     descriptors = relationship('DescriptorModel', back_populates='image')
 
-
-association_table = Table(
-    'similar_image', BaseModel.metadata,
-    Column('left_id', Integer, ForeignKey('image.id')),
-    Column('right_id', Integer, ForeignKey('image.id'))
-)
+    similar = relationship('ImageModel', secondary=image_to_image,
+                           primaryjoin='ImageModel.id==image_to_image.c.left_id',
+                           secondaryjoin='ImageModel.id==image_to_image.c.right_id',
+                           backref='similar_to', lazy='dynamic')

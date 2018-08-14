@@ -50,16 +50,16 @@ if __name__ == '__main__':
     setup_logging(args.verbose)
     logger = logging.getLogger()
 
-    if args.admin is not None:
+    if args.admin:
         run_server()
-    elif args.compare is not None:
+    elif args.compare:
         for descriptor in DescriptorService().list():
             compare_faces.delay(descriptor.id)
+    elif args.merge:
+        for image in ImageService().list():
+            find_duplicates.delay(image.id)
     elif args.scan is not None:
         scanner = Scanner(args.scan)
         scanner.run()
-    elif args.merge is not None:
-        for image in ImageService().list():
-            find_duplicates.delay(image.id)
     else:
         parser.print_help()
