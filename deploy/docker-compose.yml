@@ -3,6 +3,14 @@ services:
   mgallery-postgres:
     image: postgres:9.6
     container_name: mgallery-postgres
+    deploy:
+      resources:
+        limits:
+          cpus: '0.8'
+          memory: 12G
+        reservations:
+          cpus: '0.5'
+          memory: 8G
     volumes:
       - ./database/:/docker-entrypoint-initdb.d/
     environment:
@@ -34,7 +42,8 @@ services:
     volumes:
       - ../:/srv/mgallery/
       - ../../log/:/var/log/mgallery/
-      - /media/manti/data/Junkyard/Viber/Images:/viber
+      - /media/manti/Backup2/Photo/Library:/gallery
     environment:
+      - GALLERY_PATH=/gallery
       - DATABASE_URL=postgresql://mgallery:pa55word@mgallery-postgres/mgallery
       - TEST_DATABASE_URL=postgresql://mgallery:pa55word@mgallery-postgres-test/mgallery

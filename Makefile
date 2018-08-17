@@ -15,7 +15,7 @@ destroy:
 pytest:
 	@docker exec -it mgallery-app pytest
 
-test: start migrate pytest destroy
+test: start migrate pytest stop
 
 
 admin:

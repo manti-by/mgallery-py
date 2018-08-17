@@ -1,5 +1,6 @@
 #.gitignore
 
+.idea/
 .scannerwork/
 
 app/.pytest_cache/

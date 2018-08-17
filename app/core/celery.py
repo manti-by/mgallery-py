@@ -29,24 +29,26 @@ app.conf.ONCE = {
 
 @app.task
 def process_gallery(gallery_id):
-    gallery = GalleryService().get(id=gallery_id)
+    service = GalleryService()
+    gallery = service.get(id=gallery_id)
     if gallery is not None:
         data = extract_gallery_data(gallery.path)
-        GalleryService().update(id=gallery.id, **data)
+        service.update(id=gallery.id, **data)
         return 'Successfully processed gallery with id %d' % gallery_id
     return 'Cant find gallery with id %d' % gallery_id
 
 
 @app.task
 def process_image(image_id):
-    image = ImageService().get(id=image_id)
+    service = ImageService()
+    image = service.get(id=image_id)
     if image is not None:
         data = extract_image_data(image.path)
         dimensions = data.pop('dimensions')
         if dimensions is not None:
             data['width'] = dimensions[0]
             data['height'] = dimensions[1]
-        ImageService().update(id=image.id, **data)
+            service.update(id=image.id, **data)
         return 'Successfully processed image with id %d' % image_id
     return 'Cant find image with id %d' % image_id
 
@@ -58,8 +60,9 @@ def find_faces(image_id):
     if image is not None:
         detector = Detector(image.path)
         detector.run()
+        service = DescriptorService()
         for descriptor in detector.descriptors:
-            DescriptorService().create(image_id=image.id,
+            service.create(image_id=image.id,
                                        vector=list(descriptor))
             descriptors.append(descriptors)
         return 'Successfully found %d faces for image %d' % (len(descriptors), image_id)
@@ -70,12 +73,14 @@ def find_faces(image_id):
 @app.task
 def find_duplicates(image_id):
     duplicates = 0
-    image = ImageService().get(id=image_id)
+    service = ImageService()
+    image = service.get(id=image_id)
     if image is not None:
-        for duplicate in ImageService().list():
+        for duplicate in service.list():
             if image.phash == duplicate.phash and image.id != duplicate.id:
                 image.similar.append(duplicate)
                 duplicates += 1
+        service.commit([image])
         return 'Successfully found %d duplicates for image %d' % (duplicates, image_id)
     else:
         return 'Cant find image with id %d' % image_id
@@ -83,7 +88,8 @@ def find_duplicates(image_id):
 
 @app.task
 def compare_faces(descriptor_id):
-    descriptor = DescriptorService().get(id=descriptor_id)
+    ds = DescriptorService()
+    descriptor = ds.get(id=descriptor_id)
     if descriptor is not None:
         comparator = Comparator(descriptor)
         person_id = comparator.find_person()
@@ -91,7 +97,7 @@ def compare_faces(descriptor_id):
             person_id = PersonService().create(
                 name=uuid.uuid4().hex[:8]
             )
-        DescriptorService().update(
+        ds.update(
             id=descriptor_id,
             person_id=person_id
 

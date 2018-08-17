@@ -40,3 +40,7 @@ class BaseService:
     def list(self, **kwargs):
         return self.session \
             .query(self.model).filter_by(**kwargs)
+
+    def commit(self, objects):
+        self.session.add_all(objects)
+        self.session.commit()
