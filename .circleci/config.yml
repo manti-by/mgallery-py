@@ -4,7 +4,10 @@ jobs:
     working_directory: /srv/scanner/
     docker:
       - image: mantiby/mgallery:latest
-      - image: circleci/postgres:9.6.2-alpine
+        environment:
+          DATABASE_URL: postgresql://mgallery:pa55word@localhost/mgallery
+          TEST_DATABASE_URL: postgresql://mgallery:pa55word@localhost/mgallery
+      - image: circleci/postgres:9.6.5-alpine-ram
         environment:
           POSTGRES_DB: mgallery
           POSTGRES_USER: mgallery
@@ -13,23 +16,20 @@ jobs:
       - checkout
       - run:
           name: Install base dependencies
-          command: |
-            pip3 install -r requirements.txt
+          command: pip install -r requirements.txt
           working_directory: /srv/scanner/deploy/
-      - run:
-          name: Run migrations
-          command: alembic upgrade head
-          working_directory: /srv/scanner/deploy/
-          environment:
-            DATABASE_URL: postgresql://mgallery:pa55word@localhost/mgallery
       - run:
           name: Run flake8
           command: flake8
           working_directory: /srv/scanner/app/
       - run:
+          name: Wait for db
+          command: dockerize -wait tcp://localhost:5432 -timeout 10s
+      - run:
+          name: Run migrations
+          command: alembic -c alembic.test.ini upgrade head
+          working_directory: /srv/scanner/deploy/
+      - run:
           name: Run tests
           command: py.test
           working_directory: /srv/scanner/app/
-          environment:
-            DATABASE_URL: postgresql://mgallery:pa55word@localhost/mgallery
-            TEST_DATABASE_URL: postgresql://mgallery:pa55word@localhost/mgallery

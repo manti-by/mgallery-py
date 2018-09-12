@@ -63,7 +63,7 @@ def find_faces(image_id):
         service = DescriptorService()
         for descriptor in detector.descriptors:
             service.create(image_id=image.id,
-                                       vector=list(descriptor))
+                           vector=list(descriptor))
             descriptors.append(descriptors)
         return 'Successfully found %d faces for image %d' % (len(descriptors), image_id)
     else:

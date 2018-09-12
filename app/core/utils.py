@@ -22,7 +22,7 @@ def extract_gallery_data(path):
 
     try:
         path_regex = re.compile(
-            '(?P<year>\d{4})\S?(?P<ext_year>\d{4})?(?P<date>\d{2}-\d{2})?\s?(?P<name>.*)?'
+            r'(?P<year>\d{4})\S?(?P<ext_year>\d{4})?(?P<date>\d{2}-\d{2})?\s?(?P<name>.*)?'
         )
 
         for directory in path.split('/'):
