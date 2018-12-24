@@ -36,3 +36,7 @@ class ImageModel(BaseModel):
                            primaryjoin='ImageModel.id==image_to_image.c.left_id',
                            secondaryjoin='ImageModel.id==image_to_image.c.right_id',
                            backref='similar_to', lazy='dynamic')
+
+    @property
+    def similar_images(self):
+        return [x.id for x in self.similar]

@@ -1,4 +1,4 @@
-from flask_admin import Admin, AdminIndexView
+from flask_admin import Admin, AdminIndexView, expose
 from flask_admin.menu import MenuLink
 from flask_admin.contrib.sqla import ModelView
 
@@ -17,7 +17,13 @@ class GalleryView(ModelView):
 
 
 class ImageView(ModelView):
-    column_list = ('id', 'gallery_id', 'path', 'similar')
+    endpoint = 'image'
+    column_list = ('id', 'gallery_id', 'path', 'similar_images')
+    column_filters = ['gallery_id']
+
+    @expose('/<int:image_id>/')
+    def report(self, image_id):
+        return self.render('image.html', image_id=image_id)
 
 
 class DescriptorView(ModelView):
