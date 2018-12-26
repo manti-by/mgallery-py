@@ -1,0 +1,17 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+    <h1>Image {{ item.name }}</h1>
+    <div class="item">
+        <div class="gallery">
+            <a href="/gallery/{{ item.gallery.id }}">{{ item.gallery.name }}</a>
+        </div>
+        <div class="preview">
+            <img src="{{ item.path }}" alt="{{ item.name }}" width="300">
+        </div>
+        <div class="dimensions">
+            <strong>Dimensions:</strong>
+            {{ item.width }} x {{ item.height }}
+        </div>
+    </div>
+{% endblock %}

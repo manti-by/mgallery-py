@@ -10,20 +10,29 @@ from model import (
     ImageModel,
     PersonModel
 )
+from service import (
+    GalleryService,
+    ImageService,
+)
 
 
 class GalleryView(ModelView):
-    column_list = ('id', 'path')
+    column_list = ('url', 'path')
+
+    @expose('/<int:gallery_id>/')
+    def item(self, gallery_id):
+        gallery = GalleryService().get(id=gallery_id)
+        return self.render('gallery.html', item=gallery)
 
 
 class ImageView(ModelView):
-    endpoint = 'image'
-    column_list = ('id', 'gallery_id', 'path', 'similar_images')
+    column_list = ('url', 'gallery_id', 'path', 'similar_images')
     column_filters = ['gallery_id']
 
     @expose('/<int:image_id>/')
-    def report(self, image_id):
-        return self.render('image.html', image_id=image_id)
+    def item(self, image_id):
+        image = ImageService().get(id=image_id)
+        return self.render('image.html', item=image)
 
 
 class DescriptorView(ModelView):
@@ -35,10 +44,10 @@ class PersonView(ModelView):
 
 
 MV_MAP = [
-    (DescriptorModel, DescriptorView),
-    (GalleryModel, GalleryView),
-    (ImageModel, ImageView),
-    (PersonModel, PersonView),
+    # (DescriptorModel, DescriptorView, 'descriptor'),
+    (GalleryModel, GalleryView, 'gallery'),
+    (ImageModel, ImageView, 'image'),
+    # (PersonModel, PersonView, 'person'),
 ]
 
 
@@ -50,8 +59,10 @@ def run_server():
         MenuLink('Flower', url='http://localhost:5555')
     )
 
-    for model, view in MV_MAP:
-        admin.add_view(view(model, app.db.session))
+    for model, view, endpoint in MV_MAP:
+        admin.add_view(view(
+            model, app.db.session, endpoint=endpoint
+        ))
 
     app.run('0.0.0.0', 8000)
     return app

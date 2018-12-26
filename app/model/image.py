@@ -1,3 +1,4 @@
+from jinja2 import Markup
 from sqlalchemy import Table, Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
@@ -40,3 +41,9 @@ class ImageModel(BaseModel):
     @property
     def similar_images(self):
         return [x.id for x in self.similar]
+
+    @property
+    def url(self):
+        return Markup(
+            '<a href="/image/{}/">{}</a>'.format(self.id, self.id)
+        )

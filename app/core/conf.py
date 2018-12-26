@@ -20,13 +20,13 @@ settings = {
         'RECOGNIZER_PATH', 'models/dlib_face_recognition_resnet_model_v1.dat'
     ),
     'database': os.getenv(
-        'DATABASE_URL', 'postgresql://mgallery:pa55word@mgallery-postgres/mgallery'
+        'DATABASE_URL', 'postgresql://mgallery:pa55word@localhost:5433/mgallery'
     ),
     'test_database': os.getenv(
-        'TEST_DATABASE_URL', 'postgresql://mgallery:pa55word@mgallery-postgres-test/mgallery'
+        'TEST_DATABASE_URL', 'postgresql://mgallery:pa55word@localhost:5433/mgallery-test'
     ),
     'celery_broker': os.getenv(
-        'REDIS_URL', 'redis://mgallery-redis:6379/0'
+        'REDIS_URL', 'redis://localhost:6379/0'
     ),
     'logging': {
         'version': 1,

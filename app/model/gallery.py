@@ -1,3 +1,4 @@
+from jinja2 import Markup
 from sqlalchemy import Column, String, Date, SmallInteger
 from sqlalchemy.orm import relationship
 
@@ -14,3 +15,9 @@ class GalleryModel(BaseModel):
     year = Column(SmallInteger)
 
     images = relationship('ImageModel', back_populates='gallery')
+
+    @property
+    def url(self):
+        return Markup(
+            '<a href="/gallery/{}/">{}</a>'.format(self.id, self.id)
+        )
