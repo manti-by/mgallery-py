@@ -19,5 +19,5 @@ class GalleryModel(BaseModel):
     @property
     def url(self):
         return Markup(
-            '<a href="/gallery/{}/">{}</a>'.format(self.id, self.id)
+            '<a href="/gallery/{}/">{}</a>'.format(self.id, self.name)
         )

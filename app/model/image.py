@@ -45,5 +45,5 @@ class ImageModel(BaseModel):
     @property
     def url(self):
         return Markup(
-            '<a href="/image/{}/">{}</a>'.format(self.id, self.id)
+            '<a href="/image/{}/">{}</a>'.format(self.id, self.name)
         )
