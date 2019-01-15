@@ -5,10 +5,8 @@ from flask_admin.contrib.sqla import ModelView
 from core.app import app
 from core.conf import settings
 from model import (
-    DescriptorModel,
     GalleryModel,
     ImageModel,
-    PersonModel
 )
 from service import (
     GalleryService,
@@ -44,10 +42,8 @@ class PersonView(ModelView):
 
 
 MV_MAP = [
-    # (DescriptorModel, DescriptorView, 'descriptor'),
     (GalleryModel, GalleryView, 'gallery'),
     (ImageModel, ImageView, 'image'),
-    # (PersonModel, PersonView, 'person'),
 ]
 
 
