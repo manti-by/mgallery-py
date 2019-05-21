@@ -1,13 +1,24 @@
 {% extends 'admin/master.html' %}
 
 {% block body %}
+    <style>
+        .item .preview {
+            width: 100px;
+            height: 100px;
+        }
+
+        .item .preview img {
+            min-width: 100%;
+            max-width: 100%;
+        }
+    </style>
     <h1>Image {{ item.name }}</h1>
     <div class="item">
         <div class="gallery">
-            <a href="/gallery/{{ item.gallery.id }}">{{ item.gallery.name }}</a>
+            <a href="/gallery/{{ item.gallery.id }}">{{ item.gallery.year }}</a>
         </div>
         <div class="preview">
-            <img src="{{ item.path }}" alt="{{ item.name }}" width="300">
+            <img src="{{ item.path }}" alt="{{ item.name }}">
         </div>
         <div class="dimensions">
             <strong>Dimensions:</strong>

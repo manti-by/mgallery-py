@@ -1,5 +1,5 @@
 from jinja2 import Markup
-from sqlalchemy import Column, String, Date, SmallInteger
+from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 
 from model.base import BaseModel
@@ -7,17 +7,13 @@ from model.base import BaseModel
 
 class GalleryModel(BaseModel):
 
-    __tablename__ = 'gallery'
+    __tablename__ = "gallery"
 
     path = Column(String)
-    name = Column(String)
-    date = Column(Date)
-    year = Column(SmallInteger)
+    year = Column(String)
 
-    images = relationship('ImageModel', back_populates='gallery')
+    images = relationship("ImageModel", back_populates="gallery")
 
     @property
     def url(self):
-        return Markup(
-            '<a href="/gallery/{}/">{}</a>'.format(self.id, self.name)
-        )
+        return Markup('<a href="/gallery/{}/">{}</a>'.format(self.id, self.year))

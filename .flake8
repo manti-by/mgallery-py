@@ -2,7 +2,6 @@
 exclude =
     .git,
     __pycache__,
-    app/test/conftest.py
     deploy/
-max-line-length = 120
+max-line-length = 90
 max-complexity = 14

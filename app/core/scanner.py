@@ -2,21 +2,13 @@ import os
 import glob
 import logging
 
-from core.celery import (
-    process_gallery,
-    process_image,
-    find_faces
-)
-from service import (
-    GalleryService,
-    ImageService
-)
+from core.celery import process_gallery, process_image
+from service import GalleryService, ImageService
 
 logger = logging.getLogger()
 
 
 class Scanner:
-
     def __init__(self, path):
         self.path = path
         self.gallery = GalleryService()
@@ -25,17 +17,14 @@ class Scanner:
     @property
     def file_list(self):
         files = []
-        for ext in ['**/*.jpg', '**/*.jpeg', '**/*.png']:
-            files.extend(glob.glob('%s%s' % (self.path, ext), recursive=True))
+        for ext in ["**/*.jpg", "**/*.jpeg", "**/*.png", "**/*.gif"]:
+            files.extend(glob.glob("%s%s" % (self.path, ext), recursive=True))
         return files
 
     def run(self):
-        logger.debug('Start scanning %s' % self.path)
+        logger.debug("Start scanning %s" % self.path)
 
-        gallery_list = {
-            x.path: x.id
-            for x in self.gallery.list()
-        }
+        gallery_list = {x.path: x.id for x in self.gallery.list()}
         for current_file in self.file_list:
             current_directory = os.path.dirname(current_file)
             if current_directory not in gallery_list.keys():
@@ -44,21 +33,19 @@ class Scanner:
 
                 process_gallery.delay(gallery_id)
 
-                logger.debug('Added gallery %s' % current_directory)
+                logger.debug("Added gallery %s" % current_directory)
             else:
                 gallery_id = gallery_list[current_directory]
 
-            image_list = {
-                x.path: x.id
-                for x in self.image.list(gallery_id=gallery_id)
-            }
+            image_list = {x.path: x.id for x in self.image.list(gallery_id=gallery_id)}
             if current_file not in image_list.keys():
-                image_id = self.image.create(path=str(current_file), gallery_id=gallery_id)
+                image_id = self.image.create(
+                    path=str(current_file), gallery_id=gallery_id
+                )
                 image_list[current_file] = image_id
 
                 process_image.delay(image_id)
-                find_faces.delay(image_id)
 
-                logger.debug('Added image %s ' % current_file)
+                logger.debug("Added image %s " % current_file)
 
-        logger.debug('Finish scanning')
+        logger.debug("Finish scanning")
