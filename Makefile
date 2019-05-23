@@ -47,9 +47,6 @@ bash:
 ci:
 	circleci build
 
-flake:
-	flake8
-
 check:
 	black -t py37 app/
 	isort app/*.py
@@ -58,9 +55,6 @@ check:
 
 psql:
 	docker exec -it mgallery-postgres psql -U mgallery
-
-psql-test:
-	docker exec -it mgallery-postgres-test psql -U mgallery
 
 pg_dump:
 	docker exec -it mgallery-postgres pg_dump -U mgallery -d mgallery > deploy/database/database.sql

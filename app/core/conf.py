@@ -1,15 +1,11 @@
 import os
 
 settings = {
-    "gallery": os.getenv(
-        "GALLERY_PATH", "/media/gallery/"
-    ),
+    "gallery": os.getenv("GALLERY_PATH", "/media/gallery/"),
     "database": os.getenv(
         "DATABASE_URL", "postgresql://mgallery:pa55word@mgallery-postgres:5432/mgallery"
     ),
-    "celery_broker": os.getenv(
-        "REDIS_URL", "redis://mgallery-redis:6379/0"
-    ),
+    "celery_broker": os.getenv("REDIS_URL", "redis://mgallery-redis:6379/0"),
     "logging": {
         "version": 1,
         "disable_existing_loggers": True,

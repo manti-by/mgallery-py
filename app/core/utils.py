@@ -1,9 +1,7 @@
 import os
-import re
 import logging
 import logging.config
 
-from datetime import datetime
 from imagehash import phash
 from PIL import Image
 
@@ -13,9 +11,7 @@ logger = logging.getLogger()
 
 
 def extract_gallery_data(path):
-    return {
-        "year": os.path.splitext(os.path.basename(path))[0]
-    }
+    return {"year": os.path.splitext(os.path.basename(path))[0]}
 
 
 def extract_image_data(path):

@@ -27,9 +27,5 @@ jobs:
           command: dockerize -wait tcp://localhost:5432 -timeout 10s
       - run:
           name: Run migrations
-          command: alembic -c alembic.test.ini upgrade head
+          command: alembic -c alembic.ini upgrade head
           working_directory: /srv/scanner/deploy/
-      - run:
-          name: Run tests
-          command: py.test
-          working_directory: /srv/scanner/app/
