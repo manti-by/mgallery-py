@@ -2,14 +2,29 @@
 
 {% block body %}
     <style>
-        .item .preview {
-            width: 100px;
-            height: 100px;
+        .item .image {
+            margin: 0 auto;
+            max-width: 450px;
+            text-align: center;
         }
 
-        .item .preview img {
+        .item .image img {
+            display: inline-block;
             min-width: 100%;
             max-width: 100%;
+            min-height: 0;
+            max-height: initial;
+        }
+
+        .similar .flex {
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: flex-start;
+        }
+
+        .similar .item {
+            max-width: 196px;
+            margin: 0 6px 6px 0;
         }
     </style>
     <h1>Image {{ item.name }}</h1>
@@ -17,20 +32,28 @@
         <div class="gallery">
             <a href="/gallery/{{ item.gallery.id }}">{{ item.gallery.year }}</a>
         </div>
-        <div class="preview">
-            <img src="{{ item.path }}" alt="{{ item.name }}">
+        <div class="image">
+            <img src="{{ item.link }}" alt="{{ item.name }}">
         </div>
         <div class="dimensions">
-            <strong>Dimensions:</strong>
             {{ item.width }} x {{ item.height }}
         </div>
         <div class="similar">
             <h2>Similar images</h2>
-            {% for image in item.similar %}
-                <a href="/image/{{ image.id }}/">
-                    <img src="{{ image.path }}" alt="{{ image.name }}">
-                </a>
-            {% endfor %}
+            <div class="flex">
+                {% for image in item.similar %}
+                    <div class="item">
+                        <div class="image">
+                            <a href="/image/{{ image.id }}/" class="preview {% if image.height > image.width %}portrait{% endif %}">
+                                <img src="{{ image.link }}" alt="{{ image.name }}">
+                            </a>
+                        </div>
+                        <div class="dimensions">
+                            {{ item.width }} x {{ item.height }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 {% endblock %}

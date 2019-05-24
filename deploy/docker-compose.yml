@@ -29,4 +29,4 @@ services:
     volumes:
       - ../:/srv/mgallery/
       - ../../log/:/var/log/mgallery/
-      - /home/manti/download/Scans/RCDP:/media/gallery
+      - ../../lib/:/var/lib/mgallery/

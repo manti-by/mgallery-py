@@ -24,14 +24,8 @@ build:
 	cd deploy/ && docker build -t mantiby/mgallery:latest .
 
 
-reload-sv:
-	docker exec -it mgallery-app supervisorctl restart mgallery:
-
-stop-sv:
-	docker exec -it mgallery-app supervisorctl stop mgallery:
-
-start-sv:
-	docker exec -it mgallery-app supervisorctl start mgallery:
+reload-uwsgi:
+	docker exec -it mgallery-app supervisorctl restart mgallery:uwsgi
 
 
 venv:

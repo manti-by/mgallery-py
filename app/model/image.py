@@ -2,6 +2,7 @@ from jinja2 import Markup
 from sqlalchemy import Table, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 
+from core.conf import settings
 from model.base import BaseModel
 
 
@@ -43,3 +44,7 @@ class ImageModel(BaseModel):
     @property
     def url(self):
         return Markup('<a href="/image/{}/">{}</a>'.format(self.id, self.name))
+
+    @property
+    def link(self):
+        return self.path.replace(settings["gallery"], "/media/")

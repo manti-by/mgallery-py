@@ -1,7 +1,7 @@
 import os
 
 settings = {
-    "gallery": os.getenv("GALLERY_PATH", "/media/gallery/"),
+    "gallery": os.getenv("GALLERY_PATH", "/var/lib/mgallery/"),
     "database": os.getenv(
         "DATABASE_URL", "postgresql://mgallery:pa55word@mgallery-postgres:5432/mgallery"
     ),
