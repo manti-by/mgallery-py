@@ -10,8 +10,6 @@ services:
       - POSTGRES_DB=mgallery
       - POSTGRES_USER=mgallery
       - POSTGRES_PASSWORD=pa55word
-    ports:
-      - "5432:5432"
 
   mgallery-redis:
     image: redis:latest
@@ -21,12 +19,12 @@ services:
     image: mantiby/mgallery:latest
     container_name: mgallery-app
     ports:
-      - "8000:8000"
-      - "5555:5555"
+      - "8808:8808"
+      - "5505:5505"
     links:
       - mgallery-postgres
       - mgallery-redis
     volumes:
       - ../:/srv/mgallery/
-      - ../../log/:/var/log/mgallery/
-      - ../../lib/:/var/lib/mgallery/
+      - /mnt/nostromo/mgallery/log/:/var/log/mgallery/
+      - /mnt/nostromo/mgallery/lib/:/var/lib/mgallery/

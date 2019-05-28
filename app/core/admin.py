@@ -39,5 +39,5 @@ def run_server():
     for model, view, endpoint in MV_MAP:
         admin.add_view(view(model, app.db.session, endpoint=endpoint))
 
-    app.run("0.0.0.0", 8000)
+    app.run("0.0.0.0", 8228)
     return app
