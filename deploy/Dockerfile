@@ -31,5 +31,6 @@ RUN chown -R www-data:www-data /srv/mgallery/ && \
 
 
 # Setup supervisor
+WORKDIR /srv/mgallery/app/
 COPY supervisor.conf /etc/supervisor/conf.d/mgallery.conf
 CMD supervisord -n -c /etc/supervisor/supervisord.conf
