@@ -1,16 +1,39 @@
-{% extends 'admin/master.html' %}
+{% extends 'base.html' %}
 
-{% block body %}
+{% block content %}
     <style>
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: .5rem 1rem;
+            font-size: 1.5rem;
+            background: #FFF;
+            z-index: 1000;
+            transform: translate3d(0, -100%, 0);
+            transition: transform .2s linear, background 1s ease, height .5s ease;
+            box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+        }
+
+        .header.visible {
+            transform: translateZ(0);
+        }
+
+        .header a {
+            color: #333;
+            text-decoration: none;
+        }
+
         .flex {
             display: flex;
+            margin: 2rem auto;
             flex-flow: row wrap;
             justify-content: flex-start;
         }
         .preview {
-            width: 386px;
-            height: 386px;
-            margin: 0 6px 6px 0;
+            width: 382px;
+            height: 382px;
+            margin: 0 2px 2px 0;
             text-align: center;
             overflow: hidden;
         }
@@ -27,8 +50,25 @@
             min-height: 0;
             max-height: initial;
         }
+
+        @media only screen and (max-width: 425px) {
+            .preview {
+                width: 425px;
+                height: 425px;
+            }
+        }
+
+        @media only screen and (max-width: 375px) {
+            .preview {
+                width: 375px;
+                height: 375px;
+                margin: 0 0 6px 0;
+            }
+        }
     </style>
-    <h1>Gallery {{ item.year }}</h1>
+    <h1 class="header">
+        <a href="/gallery/">Home</a> > {{ item.year }}
+    </h1>
     <div class="flex">
         {% for image in item.images %}
             <a href="/image/{{ image.id }}/" class="preview {% if image.height > image.width %}portrait{% endif %}">

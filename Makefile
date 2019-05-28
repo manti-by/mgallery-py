@@ -12,13 +12,13 @@ destroy:
 
 
 admin:
-	docker exec -it mgallery-app python app/main.py -a
+	docker exec -it mgallery-app python main.py -a
 
 merge:
-	docker exec -it mgallery-app python app/main.py -m
+	docker exec -it mgallery-app python main.py -m
 
 scan:
-	docker exec -it mgallery-app python app/main.py -s
+	docker exec -it mgallery-app python main.py -s
 
 build:
 	cd deploy/ && docker build -t mantiby/mgallery:latest .
