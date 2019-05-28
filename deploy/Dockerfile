@@ -1,5 +1,5 @@
 # Use an official python 3.7 image
-FROM python:3.7
+FROM python:3.7-slim
 
 
 # Update base image
@@ -15,20 +15,6 @@ RUN mkdir -p /srv/mgallery/ && \
     mkdir -p /etc/mgallery/ && \
     mkdir -p /var/log/mgallery/ && \
     mkdir -p /var/lib/mgallery/
-
-
-# Set working directory and expose ports
-WORKDIR /srv/mgallery/
-RUN git init && \
-    git remote add origin https://github.com/manti-by/mgallery.git && \
-    git pull origin master
-
-
-# Install Dokerize plugin
-ENV DOCKERIZE_VERSION v0.6.1
-RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && \
-    tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && \
-    rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
 
 # Install app requirements

@@ -34,10 +34,10 @@ def run_server():
     app.config["SQLALCHEMY_DATABASE_URI"] = settings["database"]
 
     admin = Admin(app, index_view=AdminIndexView(url="/"))
-    admin.add_link(MenuLink("Flower", url="http://localhost:5555"))
+    admin.add_link(MenuLink("Flower", url="http://localhost:5505"))
 
     for model, view, endpoint in MV_MAP:
         admin.add_view(view(model, app.db.session, endpoint=endpoint))
 
-    app.run("0.0.0.0", 8228)
+    app.run("0.0.0.0", 8808)
     return app

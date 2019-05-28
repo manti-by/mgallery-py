@@ -23,7 +23,7 @@ jobs:
           working_directory: /srv/scanner/app/
       - run:
           name: Wait for db
-          command: dockerize -wait tcp://localhost:5432 -timeout 10s
+          command: docker exec -it mgallery-postgres psql -U mgallery -c '\l' > /dev/null; do printf "."; sleep 10; done
       - run:
           name: Run migrations
           command: alembic -c alembic.ini upgrade head
