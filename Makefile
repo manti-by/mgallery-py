@@ -4,6 +4,9 @@ start:
 	@until docker exec -it mgallery-postgres psql -U mgallery -c '\l' > /dev/null; do printf "."; sleep 1; done
 	@printf " Connected!\n"
 
+local:
+	@docker-compose -f deploy/docker-compose.local.yml up
+
 stop:
 	@docker-compose -f deploy/docker-compose.yml stop
 

@@ -1,3 +1,5 @@
+import logging
+
 from flask_admin import Admin, AdminIndexView, expose
 from flask_admin.menu import MenuLink
 from flask_admin.contrib.sqla import ModelView
@@ -8,12 +10,16 @@ from model import GalleryModel, ImageModel
 from service import GalleryService, ImageService
 
 
+logger = logging.getLogger()
+
+
 class GalleryView(ModelView):
     column_list = ("url", "path")
 
     @expose("/<int:gallery_id>/")
     def item(self, gallery_id):
         gallery = GalleryService().get(id=gallery_id)
+        logger.debug(f"GET Gallery #{gallery_id}")
         return self.render("gallery.html", item=gallery)
 
 
@@ -24,6 +30,7 @@ class ImageView(ModelView):
     @expose("/<int:image_id>/")
     def item(self, image_id):
         image = ImageService().get(id=image_id)
+        logger.debug(f"GET Image #{image_id}")
         return self.render("image.html", item=image)
 
 
@@ -34,10 +41,12 @@ def run_server():
     app.config["SQLALCHEMY_DATABASE_URI"] = settings["database"]
 
     admin = Admin(app, index_view=AdminIndexView(url="/"))
-    admin.add_link(MenuLink("Flower", url="http://localhost:5505"))
+    admin.add_link(MenuLink("Flower", url=settings["flower_url"]))
 
     for model, view, endpoint in MV_MAP:
         admin.add_view(view(model, app.db.session, endpoint=endpoint))
 
-    app.run("0.0.0.0", 8808)
+    logger.debug("Run app")
+    app.run(settings["host"], settings["port"])
+
     return app
