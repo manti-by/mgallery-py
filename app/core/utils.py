@@ -35,9 +35,13 @@ def extract_image_data(path):
 
 def setup_logging(verbose_level):
     try:
-        log_level = {None: logging.ERROR, 0: logging.WARNING, 1: logging.INFO}[
-            verbose_level
-        ]
+        log_level = {
+            0: logging.CRITICAL,
+            1: logging.ERROR,
+            2: logging.WARNING,
+            3: logging.INFO,
+            4: logging.DEBUG,
+        }[int(verbose_level or 0)]
     except KeyError:
         log_level = logging.DEBUG
 

@@ -17,3 +17,7 @@ class GalleryModel(BaseModel):
     @property
     def url(self):
         return Markup('<a href="/gallery/{}/">{}</a>'.format(self.id, self.year))
+
+    @property
+    def cover(self):
+        return self.images[-1]

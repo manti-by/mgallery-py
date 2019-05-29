@@ -1,0 +1,81 @@
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: .5rem 1rem;
+    font-size: 1.5rem;
+    background: #FFF;
+    z-index: 1000;
+    transform: translate3d(0, -100%, 0);
+    transition: transform .2s linear, background 1s ease, height .5s ease;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+header.visible {
+    transform: translateZ(0);
+}
+
+header a {
+    color: #333;
+    text-decoration: none;
+}
+
+section {
+    margin-top: 4rem;
+}
+
+.col {
+    padding: 0;
+}
+
+.preview {
+    position: relative;
+}
+
+.preview .image {
+    display: inline-block;
+    width: 282px;
+    height: 282px;
+    text-align: center;
+    overflow: hidden;
+}
+
+.preview .image img {
+    display: inline-block;
+    min-width: 0;
+    max-width: initial;
+    min-height: 100%;
+    max-height: 100%;
+}
+
+.preview .image.portrait img {
+    min-width: 100%;
+    max-width: 100%;
+    min-height: 0;
+    max-height: initial;
+}
+
+.preview .name,
+.preview .similar {
+    position: absolute;
+    left: 1rem;
+    bottom: 1rem;
+    font-size: 2rem;
+    text-shadow: 0 1px 3px rgba(255, 255, 255, 1);
+}
+
+.preview .similar {
+    left: auto;
+    right: 0;
+    font-size: 1rem;
+}
+
+.original {
+    width: 100%;
+}
+
+.original img {
+    display: inline-block;
+    min-width: 100%;
+    max-width: 100%;
+}

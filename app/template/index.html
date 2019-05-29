@@ -2,18 +2,18 @@
 
 {% block content %}
     <header class="visible">
-        <div class="container"><a href="/">MGallery</a> > {{ item.year }}</div>
+        <div class="container">MGallery</div>
     </header>
     <section>
         <div class="container">
             <div class="row justify-content-start gallery">
-                {% for image in item.images %}
+                {% for gallery in gallery_list %}
                     <div class="col-12 col-md-6 col-lg-4 col-xl-3">
                         <div class="preview">
-                            <a href="/image/{{ image.id }}/" class="image {% if image.height > image.width %}portrait{% endif %}">
-                                <img src="{{ image.link }}" alt="{{ image.name }}">
+                            <a href="/gallery/{{ gallery.id }}/" class="image {% if gallery.cover.height > gallery.cover.width %}portrait{% endif %}">
+                                <img src="{{ gallery.cover.link }}" alt="{{ gallery.cover.name }}">
                             </a>
-                            <span class="similar">{{ image.similar.count() }}</span>
+                            <span class="name">{{ gallery.year }}</span>
                         </div>
                     </div>
                 {% endfor %}

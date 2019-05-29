@@ -1,0 +1,27 @@
+@media only screen and (max-width: 1024px) {
+    .preview .image {
+        width: 313px;
+        height: 313px;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .preview .image {
+        width: 352px;
+        height: 352px;
+    }
+}
+
+@media only screen and (max-width: 425px) {
+    .preview .image {
+        width: 395px;
+        height: 395px;
+    }
+}
+
+@media only screen and (max-width: 375px) {
+    .preview .image {
+        width: 345px;
+        height: 345px;
+    }
+}

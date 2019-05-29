@@ -26,7 +26,9 @@ parser.add_argument(
     help="Scan gallery for images",
 )
 
-parser.add_argument("-v", "--verbose", action="count", help="Increase output verbosity")
+parser.add_argument(
+    "-v", "--verbose", action="count", default=3, help="Increase output verbosity"
+)
 
 parser.add_argument(
     "--version", action="version", version=version, help="Print application version"

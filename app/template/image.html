@@ -1,59 +1,44 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <style>
-        .item .image {
-            margin: 0 auto;
-            max-width: 450px;
-            text-align: center;
-        }
-
-        .item .image img {
-            display: inline-block;
-            min-width: 100%;
-            max-width: 100%;
-            min-height: 0;
-            max-height: initial;
-        }
-
-        .similar .flex {
-            display: flex;
-            flex-flow: row wrap;
-            justify-content: flex-start;
-        }
-
-        .similar .item {
-            max-width: 196px;
-            margin: 0 6px 6px 0;
-        }
-    </style>
-    <h1>Image {{ item.name }}</h1>
-    <div class="item">
-        <div class="gallery">
-            <a href="/gallery/{{ item.gallery.id }}">{{ item.gallery.year }}</a>
+    <header class="visible">
+        <div class="container">
+            <a href="/">MGallery</a> >
+            <a href="/gallery/{{ item.gallery.id }}">{{ item.gallery.year }}</a> >
+            {{ item.name }}
         </div>
-        <div class="image">
-            <img src="{{ item.link }}" alt="{{ item.name }}">
-        </div>
-        <div class="dimensions">
-            {{ item.width }} x {{ item.height }}
-        </div>
-        <div class="similar">
-            <h2>Similar images</h2>
-            <div class="flex">
-                {% for image in item.similar %}
-                    <div class="item">
-                        <div class="image">
-                            <a href="/image/{{ image.id }}/" class="preview {% if image.height > image.width %}portrait{% endif %}">
-                                <img src="{{ image.link }}" alt="{{ image.name }}">
-                            </a>
-                        </div>
-                        <div class="dimensions">
-                            {{ item.width }} x {{ item.height }}
-                        </div>
+    </header>
+    <section>
+        <div class="container">
+            <div class="original">
+                <img src="{{ item.link }}" alt="{{ item.name }}">
+            </div>
+            <div class="dimensions">
+                Dimensions: {{ item.width }} x {{ item.height }}
+            </div>
+            <hr>
+            <div class="similar">
+                {% if item.similar.count() %}
+                    <div>Similar images</div>
+                    <div class="row">
+                        {% for image in item.similar %}
+                            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                                <div class="preview">
+                                    <a href="/image/{{ image.id }}/" class="image {% if image.height > image.width %}portrait{% endif %}">
+                                        <img src="{{ image.link }}" alt="{{ image.name }}">
+                                    </a>
+                                    <span class="name">{{ image.name }}</span>
+                                    <span class="dimensions">
+                                        {{ image.width }} x {{ image.height }}
+                                    </span>
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
-                {% endfor %}
+                {% else %}
+                    <div class="col">There are no similar images</div>
+                {% endif %}
             </div>
         </div>
-    </div>
+    </section>
 {% endblock %}
