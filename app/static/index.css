@@ -20,22 +20,19 @@ header a {
     text-decoration: none;
 }
 
-section {
-    margin-top: 4rem;
-}
-
-.col {
+.col-12, .col-md-6, .col-lg-4, .col-xl-3 {
     padding: 0;
 }
 
 .preview {
+    display: block;
     position: relative;
 }
 
 .preview .image {
-    display: inline-block;
-    width: 282px;
-    height: 282px;
+    display: block;
+    width: 285px;
+    height: 285px;
     text-align: center;
     overflow: hidden;
 }
@@ -66,7 +63,7 @@ section {
 
 .preview .similar {
     left: auto;
-    right: 0;
+    right: 1.5rem;
     font-size: 1rem;
 }
 

@@ -48,3 +48,7 @@ class ImageModel(BaseModel):
     @property
     def link(self):
         return self.path.replace(settings["gallery"], "/media/")
+
+    @property
+    def is_portrait(self):
+        return self.height > self.width

@@ -3,11 +3,13 @@
     'use strict';
 
     let wnd = $(window),
-        header = $('.header'),
+        header = $('header'),
         prev_y = wnd.scrollTop(),
         curr_y = wnd.scrollTop();
 
     if (header.get(0)) {
+        $('section').css('margin-top', header.height());
+
         setInterval(function () {
             curr_y = wnd.scrollTop();
 
