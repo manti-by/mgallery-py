@@ -2,7 +2,7 @@
 
 {% block content %}
     <header class="visible">
-        <div class="container"><a href="/">MGallery</a> > {{ item.year }}</div>
+        <div class="container"><a href="/">MGallery</a> > {{ item.name }}</div>
     </header>
     <section>
         <div class="container">
@@ -13,7 +13,9 @@
                             <a href="/image/{{ image.id }}/" class="image {% if image.is_portrait %}portrait{% endif %}">
                                 <img src="{{ image.link }}" alt="{{ image.name }}">
                             </a>
-                            <div class="similar">{{ image.similar.count() }}</div>
+                            {% if image.similar.count() %}
+                                <div class="similar">{{ image.similar.count() }}</div>
+                            {% endif %}
                         </div>
                     </div>
                 {% endfor %}

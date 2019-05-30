@@ -25,3 +25,17 @@
         height: 375px;
     }
 }
+
+@media only screen and (max-width: 360px) {
+    .preview .image {
+        width: 360px;
+        height: 360px;
+    }
+}
+
+@media only screen and (max-width: 325px) {
+    .preview .image {
+        width: 325px;
+        height: 325px;
+    }
+}

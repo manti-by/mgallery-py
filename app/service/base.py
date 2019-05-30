@@ -1,3 +1,4 @@
+from sqlalchemy import text
 from core.app import app
 from service.exception import MissingRequiredField, ModelNotSetException
 
@@ -35,7 +36,7 @@ class BaseService:
         return self.list(**kwargs).first()
 
     def list(self, **kwargs):
-        return self.session.query(self.model).filter_by(**kwargs)
+        return self.session.query(self.model).filter_by(**kwargs).order_by(text("created_at desc"))
 
     def commit(self, objects):
         self.session.add_all(objects)

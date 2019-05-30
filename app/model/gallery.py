@@ -10,14 +10,14 @@ class GalleryModel(BaseModel):
     __tablename__ = "gallery"
 
     path = Column(String)
-    year = Column(String)
+    name = Column(String)
 
-    images = relationship("ImageModel", back_populates="gallery")
+    images = relationship("ImageModel", back_populates="gallery", order_by="ImageModel.created_at.desc()")
 
     @property
     def url(self):
-        return Markup('<a href="/gallery/{}/">{}</a>'.format(self.id, self.year))
+        return Markup('<a href="/gallery/{}/">{}</a>'.format(self.id, self.name))
 
     @property
     def cover(self):
-        return self.images[-1]
+        return self.images[1]

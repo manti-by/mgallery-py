@@ -1,8 +1,13 @@
+body {
+    font-family: "Roboto", Helvetica, Arial, sans-serif;
+    font-size: 15px;
+}
+
 header {
     position: fixed;
     top: 0;
     width: 100%;
-    padding: .5rem 1rem;
+    padding: .5rem 0;
     font-size: 1.5rem;
     background: #FFF;
     z-index: 1000;
@@ -15,8 +20,12 @@ header.visible {
     transform: translateZ(0);
 }
 
-header a {
+a {
     color: #333;
+    text-decoration: none;
+}
+
+a:hover {
     text-decoration: none;
 }
 
@@ -52,8 +61,7 @@ header a {
     max-height: initial;
 }
 
-.preview .name,
-.preview .similar {
+.preview .name {
     position: absolute;
     left: 1rem;
     bottom: 1rem;
@@ -62,9 +70,17 @@ header a {
 }
 
 .preview .similar {
-    left: auto;
+    position: absolute;
     right: 1.5rem;
+    bottom: 1rem;
+    width: 2rem;
+    height: 2rem;
+    padding-top: .25rem;
     font-size: 1rem;
+    text-align: center;
+    border-radius: 2rem;
+    background: #FFF;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .5);
 }
 
 .original {

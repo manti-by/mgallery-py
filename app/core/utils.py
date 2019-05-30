@@ -11,12 +11,13 @@ logger = logging.getLogger()
 
 
 def extract_gallery_data(path):
-    return {"year": os.path.splitext(os.path.basename(path))[0]}
+    return {"name": os.path.splitext(os.path.basename(path))[0]}
 
 
 def extract_image_data(path):
     result = {
         "name": os.path.basename(path),
+        "size": 0,
         "width": None,
         "height": None,
         "phash": None,
@@ -24,6 +25,7 @@ def extract_image_data(path):
 
     try:
         image = Image.open(path)
+        result["size"] = len(image.fp.read())
         result["width"] = image.size[0]
         result["height"] = image.size[1]
         result["phash"] = str(phash(image))

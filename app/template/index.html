@@ -13,7 +13,9 @@
                             <a href="/gallery/{{ gallery.id }}/" class="image {% if gallery.cover.is_portrait %}portrait{% endif %}">
                                 <img src="{{ gallery.cover.link }}" alt="{{ gallery.cover.name }}">
                             </a>
-                            <div class="name">{{ gallery.year }}</div>
+                            <div class="name">
+                                <a href="/gallery/{{ gallery.id }}/">{{ gallery.name }}</a>
+                            </div>
                         </div>
                     </div>
                 {% endfor %}

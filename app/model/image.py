@@ -22,6 +22,7 @@ class ImageModel(BaseModel):
     name = Column(String)
     phash = Column(String)
 
+    size = Column(Integer)
     width = Column(Integer)
     height = Column(Integer)
 

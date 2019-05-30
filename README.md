@@ -20,7 +20,7 @@ Source link: https://github.com/manti-by/MGallery/
 
 Requirements:
 
-    Python 3+, PostgreSQL, Redis, Celery
+    Python 3.7, PostgreSQL, Redis, Celery
 
 
 Docker setup
@@ -31,8 +31,13 @@ Docker setup
 
 2. Build app image and run
 
-        $ cd deploy/ 
-        $ docker build -f Dockerfile -t mantiby/mgallery:latest .
-        $ docker-compose up
+        $ make build
+        $ make local
 
-3. For additional commands check Makefile
+3. Scan gallery and merge duplicates
+
+        $ make scan
+        $ make merge
+
+
+NOTE: For additional commands check Makefile

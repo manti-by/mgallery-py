@@ -37,8 +37,9 @@ ALTER TABLE public.alembic_version OWNER TO mgallery;
 
 CREATE TABLE public.gallery (
     id integer NOT NULL,
+    created_at timestamp with time zone DEFAULT now(),
     path character varying,
-    year character varying
+    name character varying
 );
 
 
@@ -72,9 +73,11 @@ ALTER SEQUENCE public.gallery_id_seq OWNED BY public.gallery.id;
 
 CREATE TABLE public.image (
     id integer NOT NULL,
+    created_at timestamp with time zone DEFAULT now(),
     path character varying,
     name character varying,
     phash character varying,
+    size integer,
     width integer,
     height integer,
     gallery_id integer
@@ -136,7 +139,31 @@ ALTER TABLE ONLY public.image ALTER COLUMN id SET DEFAULT nextval('public.image_
 --
 
 COPY public.alembic_version (version_num) FROM stdin;
-dfe40385cf2a
+7cc447b540fd
+\.
+
+
+--
+-- Data for Name: gallery; Type: TABLE DATA; Schema: public; Owner: mgallery
+--
+
+COPY public.gallery (id, created_at, path, name) FROM stdin;
+\.
+
+
+--
+-- Data for Name: image; Type: TABLE DATA; Schema: public; Owner: mgallery
+--
+
+COPY public.image (id, created_at, path, name, phash, size, width, height, gallery_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: image_to_image; Type: TABLE DATA; Schema: public; Owner: mgallery
+--
+
+COPY public.image_to_image (left_id, right_id) FROM stdin;
 \.
 
 
@@ -144,14 +171,14 @@ dfe40385cf2a
 -- Name: gallery_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mgallery
 --
 
-SELECT pg_catalog.setval('public.gallery_id_seq', 32, true);
+SELECT pg_catalog.setval('public.gallery_id_seq', 1, false);
 
 
 --
 -- Name: image_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mgallery
 --
 
-SELECT pg_catalog.setval('public.image_id_seq', 10838, true);
+SELECT pg_catalog.setval('public.image_id_seq', 1, false);
 
 
 --
