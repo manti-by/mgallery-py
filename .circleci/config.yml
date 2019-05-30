@@ -18,13 +18,21 @@ jobs:
           command: pip install -r requirements.txt
           working_directory: /srv/scanner/deploy/
       - run:
-          name: Run flake8
-          command: flake8
-          working_directory: /srv/scanner/app/
+          name: Install dockerize
+          command: |
+            wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+            tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+            rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          environment:
+            DOCKERIZE_VERSION: v0.6.1
       - run:
           name: Wait for db
-          command: docker exec -it mgallery-postgres psql -U mgallery -c '\l' > /dev/null; do printf "."; sleep 10; done
+          command: dockerize -wait tcp://localhost:5432 -timeout 10s
       - run:
           name: Run migrations
           command: alembic -c alembic.ini upgrade head
           working_directory: /srv/scanner/deploy/
+      - run:
+          name: Run flake8
+          command: flake8
+          working_directory: /srv/scanner/app/

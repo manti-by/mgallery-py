@@ -10,6 +10,8 @@ services:
       - POSTGRES_DB=mgallery
       - POSTGRES_USER=mgallery
       - POSTGRES_PASSWORD=pa55word
+    ports:
+      - 5432:5432
 
   mgallery-redis:
     image: redis:latest

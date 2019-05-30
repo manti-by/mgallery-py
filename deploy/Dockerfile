@@ -5,7 +5,7 @@ FROM python:3.7-slim
 # Update base image
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y supervisor && \
+    apt-get install -y wget supervisor && \
     apt-get autoremove --purge && \
     apt-get clean
 
@@ -23,7 +23,7 @@ RUN pip install --trusted-host pypi.org --no-cache-dir --upgrade pip && \
     pip install --trusted-host pypi.org --no-cache-dir -r /etc/mgallery/requirements.txt
 
 
-# Fix file permissions
+# Fix file permissions for celery worker
 RUN chown -R www-data:www-data /srv/mgallery/ && \
     chown -R www-data:www-data /etc/mgallery/ && \
     chown -R www-data:www-data /var/log/mgallery/ && \

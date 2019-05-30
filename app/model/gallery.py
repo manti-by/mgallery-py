@@ -12,7 +12,9 @@ class GalleryModel(BaseModel):
     path = Column(String)
     name = Column(String)
 
-    images = relationship("ImageModel", back_populates="gallery", order_by="ImageModel.created_at.desc()")
+    images = relationship(
+        "ImageModel", back_populates="gallery", order_by="ImageModel.created_at.desc()"
+    )
 
     @property
     def url(self):

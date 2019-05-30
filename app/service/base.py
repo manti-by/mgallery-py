@@ -36,7 +36,11 @@ class BaseService:
         return self.list(**kwargs).first()
 
     def list(self, **kwargs):
-        return self.session.query(self.model).filter_by(**kwargs).order_by(text("created_at desc"))
+        return (
+            self.session.query(self.model)
+            .filter_by(**kwargs)
+            .order_by(text("created_at desc"))
+        )
 
     def commit(self, objects):
         self.session.add_all(objects)
