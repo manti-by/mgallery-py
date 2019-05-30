@@ -42,6 +42,17 @@ class BaseService:
             .order_by(text("created_at desc"))
         )
 
-    def commit(self, objects):
+    def delete(self, obj, commit=True):
+        self.session.delete(obj)
+        if commit:
+            self.session.commit()
+
+    def add(self, obj, commit=True):
+        self.session.add(obj)
+        if commit:
+            self.session.commit()
+
+    def add_all(self, objects, commit=True):
         self.session.add_all(objects)
-        self.session.commit()
+        if commit:
+            self.session.commit()

@@ -27,8 +27,8 @@ build:
 	cd deploy/ && docker build -t mantiby/mgallery:latest .
 
 
-reload-app:
-	docker exec -it mgallery-app supervisorctl restart mgallery:app
+reload:
+	docker exec -it mgallery-app supervisorctl restart mgallery:
 
 
 venv:

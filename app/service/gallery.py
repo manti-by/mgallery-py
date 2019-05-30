@@ -1,4 +1,4 @@
-from sqlalchemy import desc
+from sqlalchemy import desc, func
 
 from model import GalleryModel, ImageModel
 from service import BaseService

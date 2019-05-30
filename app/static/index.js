@@ -8,7 +8,7 @@
         curr_y = wnd.scrollTop();
 
     if (header.get(0)) {
-        $('section').css('margin-top', header.height());
+        $('section').css('margin-top', header.height() + 30);
 
         setInterval(function () {
             curr_y = wnd.scrollTop();

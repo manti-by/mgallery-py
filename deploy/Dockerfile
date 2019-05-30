@@ -24,10 +24,11 @@ RUN pip install --trusted-host pypi.org --no-cache-dir --upgrade pip && \
 
 
 # Fix file permissions for celery worker
-RUN chown -R www-data:www-data /srv/mgallery/ && \
-    chown -R www-data:www-data /etc/mgallery/ && \
-    chown -R www-data:www-data /var/log/mgallery/ && \
-    chown -R www-data:www-data /var/lib/mgallery/
+RUN useradd -m -s /bin/bash manti
+RUN chown -R manti:manti /srv/mgallery/ && \
+    chown -R manti:manti /etc/mgallery/ && \
+    chown -R manti:manti /var/log/mgallery/ && \
+    chown -R manti:manti /var/lib/mgallery/
 
 
 # Setup supervisor
