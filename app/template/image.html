@@ -16,6 +16,9 @@
             <div class="dimensions">
                 Dimensions: {{ item.width }} x {{ item.height }}
             </div>
+            <div class="size">
+                Size: {{ item.size }}
+            </div>
             <hr>
             <div class="similar">
                 {% if item.similar.count() %}
@@ -29,7 +32,10 @@
                                     </a>
                                     <div class="name">{{ image.name }}</div>
                                     <div class="dimensions">
-                                        {{ image.width }} x {{ image.height }}
+                                        Dimensions: {{ image.width }} x {{ image.height }}
+                                    </div>
+                                    <div class="size">
+                                        Size: {{ image.size }}
                                     </div>
                                 </div>
                             </div>

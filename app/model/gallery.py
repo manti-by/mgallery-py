@@ -22,4 +22,4 @@ class GalleryModel(BaseModel):
 
     @property
     def cover(self):
-        return self.images[1]
+        return self.images[0]
