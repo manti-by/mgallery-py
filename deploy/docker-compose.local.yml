@@ -22,7 +22,6 @@ services:
     container_name: mgallery-app
     ports:
       - 8808:8808
-      - 5505:5505
     links:
       - mgallery-postgres
       - mgallery-redis
@@ -34,3 +33,31 @@ services:
       - FLASK_DEBUG=1
       - TEMPLATES_AUTO_RELOAD=1
       - FLOWER_URL=http://localhost/flower/
+      - ROLE=app
+
+  mgallery-celery:
+    image: mantiby/mgallery:latest
+    container_name: mgallery-celery
+    links:
+      - mgallery-postgres
+      - mgallery-redis
+    volumes:
+      - ../:/srv/mgallery/
+      - /home/manti/www/manti/mgallery/log/:/var/log/mgallery/
+      - /home/manti/www/manti/mgallery/lib/:/var/lib/mgallery/
+    environment:
+      - ROLE=celery
+
+  mgallery-flower:
+    image: mantiby/mgallery:latest
+    container_name: mgallery-flower
+    ports:
+      - 5505:5505
+    links:
+      - mgallery-postgres
+      - mgallery-redis
+    volumes:
+      - ../:/srv/mgallery/
+      - /home/manti/www/manti/mgallery/log/:/var/log/mgallery/
+    environment:
+      - ROLE=flower

@@ -5,7 +5,7 @@ FROM python:3.7-slim
 # Update base image
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y wget supervisor && \
+    apt-get install -y wget && \
     apt-get autoremove --purge && \
     apt-get clean
 
@@ -33,5 +33,4 @@ RUN chown -R manti:manti /srv/mgallery/ && \
 
 # Setup supervisor
 WORKDIR /srv/mgallery/app/
-COPY supervisor.conf /etc/supervisor/conf.d/mgallery.conf
-CMD supervisord -n -c /etc/supervisor/supervisord.conf
+CMD python run.py

@@ -13,6 +13,8 @@ from service import GalleryService, ImageService
 
 logger = logging.getLogger()
 
+hash(1)
+
 
 class IndexView(BaseView):
     @expose("/")

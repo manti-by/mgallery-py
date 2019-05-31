@@ -19,8 +19,7 @@ services:
     image: mantiby/mgallery:latest
     container_name: mgallery-app
     ports:
-      - "8808:8808"
-      - "5505:5505"
+      - 8808:8808
     links:
       - mgallery-postgres
       - mgallery-redis
@@ -28,3 +27,30 @@ services:
       - ../:/srv/mgallery/
       - /mnt/nostromo/mgallery/log/:/var/log/mgallery/
       - /mnt/nostromo/mgallery/lib/:/var/lib/mgallery/
+
+  mgallery-celery:
+    image: mantiby/mgallery:latest
+    container_name: mgallery-celery
+    links:
+      - mgallery-postgres
+      - mgallery-redis
+    volumes:
+      - ../:/srv/mgallery/
+      - /mnt/nostromo/mgallery/log/:/var/log/mgallery/
+      - /mnt/nostromo/mgallery/lib/:/var/lib/mgallery/
+    environment:
+      - ROLE=celery
+
+  mgallery-flower:
+    image: mantiby/mgallery:latest
+    container_name: mgallery-flower
+    ports:
+      - 5505:5505
+    links:
+      - mgallery-postgres
+      - mgallery-redis
+    volumes:
+      - ../:/srv/mgallery/
+      - /mnt/nostromo/mgallery/log/:/var/log/mgallery/
+    environment:
+      - ROLE=flower
