@@ -27,6 +27,9 @@ services:
       - ../:/srv/mgallery/
       - /mnt/nostromo/mgallery/log/:/var/log/mgallery/
       - /mnt/nostromo/mgallery/lib/:/var/lib/mgallery/
+    environment:
+      - FLOWER_URL=https://mx.manti.by/flower/
+      - ROLE=app
 
   mgallery-celery:
     image: mantiby/mgallery:latest
