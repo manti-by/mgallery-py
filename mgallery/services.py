@@ -33,14 +33,16 @@ def find_duplicates(
         return
 
     if not all((image["phash"], image["width"], image["height"])):
-        logger.debug(f"Skip {image['path']} with empty pHash and size data")
+        logger.info(f"Skip image {image['path']} with empty pHash and size data")
         return
 
     gallery_service = GalleryService()
     gallery = gallery_service.get(gallery_id=image["gallery_id"])
     for duplicate in image_service.list(exclude=exclude):
         if not all((duplicate["phash"], duplicate["width"], duplicate["height"])):
-            logger.debug(f"Skip {duplicate['path']} with empty pHash and size data")
+            logger.info(
+                f"Skip duplicate {duplicate['path']} with empty pHash and size data"
+            )
             continue
 
         if image["phash"] == duplicate["phash"] and image["id"] != duplicate["id"]:

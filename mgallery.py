@@ -3,6 +3,8 @@ import argparse
 from mgallery.queue import queue
 from mgallery.settings import GALLERY_PATH
 from mgallery.utils import setup_logging
+from mgallery.merger import Merger
+from mgallery.scanner import Scanner
 
 parser = argparse.ArgumentParser(
     prog="python mgallery.py", description="Image deduplicate script.", add_help=True
@@ -46,12 +48,8 @@ if __name__ == "__main__":
     if args.clean:
         queue.empty()
     elif args.merge:
-        from mgallery.merger import Merger
-
         Merger().run(dry_run=not args.delete)
     elif args.scan is not None:
-        from mgallery.scanner import Scanner
-
         Scanner(args.scan).run()
     else:
         parser.print_help()

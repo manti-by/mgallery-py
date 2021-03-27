@@ -26,6 +26,7 @@ class Scanner:
     def run(self):
         logger.info(f"Start scanning {self.path}")
 
+        new_images = 0
         gallery_list = {x["path"]: x["id"] for x in self.gallery_service.list()}
         for current_file in self.file_list:
             current_directory = os.path.dirname(current_file)
@@ -48,8 +49,9 @@ class Scanner:
                 image_id = self.image_service.create(
                     gallery_id=gallery_id, path=current_file, name=file_name
                 )
+                new_images += 1
                 image_list[current_file] = image_id
                 queue.enqueue(process_image, image_id)
-                logger.info(f"Added image {file_name} to {directory_name}")
+                logger.info(f"Added image {file_name} to gallery {directory_name}")
 
-        logger.info("Finish scanning")
+        logger.info(f"Finish scanning, added {new_images} images")

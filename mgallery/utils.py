@@ -25,6 +25,7 @@ def setup_logging(verbose_level: int = 0):
 
 
 def get_logger(name: str, verbose_level: int = 0) -> logging.Logger:
+    """ Used to override RQ logging config app services """
     setup_logging(verbose_level)
     return logging.getLogger(name)
 
