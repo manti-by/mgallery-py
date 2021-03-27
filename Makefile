@@ -1,65 +1,44 @@
-start:
-	@docker-compose -f deploy/docker-compose.yml up -d
-	@printf "Waiting for PostgreSQL."
-	@until docker exec -it mgallery-postgres psql -U mgallery -c '\l' > /dev/null; do printf "."; sleep 1; done
-	@printf " Connected!\n"
+define MIGRATION_SCRIPT
+CREATE TABLE IF NOT EXISTS gallery (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    path TEXT,
+    name TEXT,
+    datetime DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE IF NOT EXISTS image (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    gallery_id INTEGER,
+    path TEXT,
+    name TEXT,
+    phash TEXT,
+    size INTEGER,
+    width INTEGER,
+    height INTEGER,
+    datetime DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+endef
 
-local:
-	@docker-compose -f deploy/docker-compose.local.yml up
+export MIGRATION_SCRIPT
+setup:
+	sqlite3 /home/manti/www/mgallery/db.sqlite "$$MIGRATION_SCRIPT" && \
+	touch /home/manti/www/mgallery/debug.log && \
+	touch /home/manti/www/mgallery/error.log
 
-stop:
-	@docker-compose -f deploy/docker-compose.yml stop
+clean:
+	python mgallery.py -c && \
+	rm -rf /home/manti/www/mgallery/db.sqlite && \
+	rm -rf /home/manti/www/mgallery/debug.log && \
+	rm -rf /home/manti/www/mgallery/error.log
 
-destroy:
-	@docker-compose -f deploy/docker-compose.yml down
-
-
-admin:
-	docker exec -it mgallery-app python main.py -a
-
-merge:
-	docker exec -it mgallery-app python main.py -m
+worker:
+	rq worker -c mgallery.settings
 
 scan:
-	docker exec -it mgallery-app python main.py -s
+	python mgallery.py -s
 
-build:
-	cd deploy/ && docker build -t mantiby/mgallery:latest .
-
-
-reload:
-	docker exec -it mgallery-app supervisorctl restart mgallery:
-
-
-venv:
-	virtualenv -p $(shell which python3) --no-site-packages --prompt='mx-' ../venv
-
-pip:
-	pip install -Ur deploy/requirements.txt
-
-
-bash:
-	docker exec -it mgallery-app bash
-
-ci:
-	circleci build
+merge:
+	python mgallery.py -m
 
 check:
-	black -t py37 app/
-	isort app/*.py
-	flake8
-
-
-psql:
-	docker exec -it mgallery-postgres psql -U mgallery
-
-pg_dump:
-	docker exec -it mgallery-postgres pg_dump -U mgallery -d mgallery > deploy/database/database.sql
-	sudo chown -R ${USER}:${GROUP} deploy/database/
-
-migrate:
-	docker exec -it mgallery-app bash -c "cd ../deploy && alembic upgrade head"
-
-makemigrations:
-	docker exec -it mgallery-app bash -c "cd ../deploy && alembic revision --autogenerate"
-	sudo chown -R ${USER}:${GROUP} deploy/database/
+	black --target-version py38 .
+	flake8 .

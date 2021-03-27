@@ -1,13 +1,11 @@
 #.gitignore
 
 .idea/
-.scannerwork/
+.venv/
+.pytest_cache/
 
-app/.pytest_cache/
-app/core/static/cache/
-app/core/settings/local.py
-app/db.sqlite3
-app/app.log
+db.sqlite
+*.log
 
 *.pyc
 *~

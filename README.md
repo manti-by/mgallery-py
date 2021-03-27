@@ -5,34 +5,33 @@ Gallery with face recognition
 About
 ----
 
-Custom gallery engine.
+Image deduplicate script.
 
-[![CircleCI](https://img.shields.io/circleci/project/github/manti-by/MGallery/master.svg)](https://circleci.com/gh/manti-by/mgallery)
-[![Docker](https://img.shields.io/docker/automated/mantiby/mgallery.svg)](https://hub.docker.com/r/mantiby/mgallery/)
-
-[![Python 3.7](https://img.shields.io/badge/python-3.7-green.svg)](https://www.python.org/downloads/release/python-370/)
+[![Python 3.9](https://img.shields.io/badge/python-3.7-green.svg)](https://www.python.org/downloads/release/python-370/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 [![License](https://img.shields.io/badge/license-BSD-blue.svg)](https://raw.githubusercontent.com/manti-by/mgallery/master/LICENSE)
 
 Author: Alexander Chaika <manti.by@gmail.com>
 
-Source link: https://github.com/manti-by/MGallery/
+Source link: https://github.com/manti-by/mgallery/
 
 Requirements:
 
-    Python 3.7, PostgreSQL, Redis, Celery
+    Python 3.9, Redis, ImageHash, Pillow
 
 
-Docker setup
+Script setup
 ----
 
-1. Install [Docker](https://docs.docker.com/install/) and 
-[docker-compose](https://docs.docker.com/compose/install/)
+1. Create virtualenv and install packages from requirements file.
 
-2. Build app image and run
+2. Set appropriate environment variables:
 
-        $ make build
-        $ make local
+        GALLERY_PATH=/home/ubuntu/mgallery/photo/
+        DATABASE_PATH=/home/ubuntu/mgallery/db.sqlite
+        REDIS_URL=redis://localhost:6379/0
+        DEBUG_LOG=/home/ubuntu/mgallery/debug.log
+        ERROR_LOG=/home/ubuntu/mgallery/error.log
 
 3. Scan gallery and merge duplicates
 

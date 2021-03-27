@@ -1,0 +1,45 @@
+import os
+
+
+GALLERY_PATH = os.getenv("GALLERY_PATH", "/home/ubuntu/mgallery/photo/")
+
+DATABASE_PATH = os.getenv("DATABASE_PATH", "/home/ubuntu/mgallery/db.sqlite")
+
+REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+
+QUEUES = ("mgallery",)
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": True,
+    "formatters": {
+        "standard": {
+            "format": "%(asctime)s [%(levelname)s] %(message)s",
+            "datefmt": "%H:%M:%S",
+        }
+    },
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "standard",
+        },
+        "debug_log": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "filename": os.getenv("DEBUG_LOG", "/home/ubuntu/mgallery/debug.log"),
+        },
+        "error_log": {
+            "level": "ERROR",
+            "class": "logging.FileHandler",
+            "filename": os.getenv("ERROR_LOG", "/home/ubuntu/mgallery/error.log"),
+        },
+    },
+    "loggers": {
+        "": {
+            "handlers": ["console", "debug_log", "error_log"],
+            "level": "DEBUG",
+            "propagate": True,
+        }
+    },
+}

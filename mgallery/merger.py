@@ -1,0 +1,22 @@
+from mgallery.services import find_duplicates
+from mgallery.database import ImageService
+from mgallery.utils import get_logger
+
+logger = get_logger(__name__)
+
+
+class Merger:
+    def __init__(self):
+        self.image_service = ImageService()
+
+    def run(self, dry_run: bool = True):
+        logger.info("Start merging images")
+
+        exclude = []
+        for image in self.image_service.list():
+            exclude.append(image["id"])
+            duplicates = find_duplicates(image["id"], dry_run=dry_run, exclude=exclude)
+            if duplicates is not None and len(duplicates):
+                exclude += duplicates
+
+        logger.info("Finish merging")
