@@ -1,9 +1,5 @@
 import logging
 import logging.config
-from typing import Optional
-
-from imagehash import phash
-from PIL import Image
 
 from mgallery.settings import LOGGING
 
@@ -25,24 +21,6 @@ def setup_logging(verbose_level: int = 0):
 
 
 def get_logger(name: str, verbose_level: int = 0) -> logging.Logger:
-    """ Used to override RQ logging config app services """
+    """Used to override RQ logging config app services"""
     setup_logging(verbose_level)
     return logging.getLogger(name)
-
-
-def extract_image_data(path: str) -> Optional[dict]:
-    result = {
-        "size": 0,
-        "width": None,
-        "height": None,
-        "phash": None,
-    }
-    try:
-        image = Image.open(path)
-        result["size"] = len(image.fp.read())
-        result["width"] = image.size[0]
-        result["height"] = image.size[1]
-        result["phash"] = str(phash(image))
-        return result
-    except Exception as e:
-        get_logger(__name__).error(e)

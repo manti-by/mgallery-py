@@ -1,9 +1,9 @@
 import os
 
 
-GALLERY_PATH = os.getenv("GALLERY_PATH", "/home/ubuntu/mgallery/photo/")
+GALLERY_PATH = os.getenv("GALLERY_PATH", "/home/manti/www/mgallery/photo/")
 
-DATABASE_PATH = os.getenv("DATABASE_PATH", "/home/ubuntu/mgallery/db.sqlite")
+DATABASE_PATH = os.getenv("DATABASE_PATH", "/home/manti/www/mgallery/db.sqlite")
 
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
 
@@ -27,12 +27,12 @@ LOGGING = {
         "debug_log": {
             "level": "DEBUG",
             "class": "logging.FileHandler",
-            "filename": os.getenv("DEBUG_LOG", "/home/ubuntu/mgallery/debug.log"),
+            "filename": os.getenv("DEBUG_LOG", "/home/manti/www/mgallery/debug.log"),
         },
         "error_log": {
             "level": "ERROR",
             "class": "logging.FileHandler",
-            "filename": os.getenv("ERROR_LOG", "/home/ubuntu/mgallery/error.log"),
+            "filename": os.getenv("ERROR_LOG", "/home/manti/www/mgallery/error.log"),
         },
     },
     "loggers": {

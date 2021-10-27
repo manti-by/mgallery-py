@@ -1,3 +1,4 @@
+import logging
 import os
 import glob
 
@@ -5,9 +6,8 @@ from mgallery.queue import queue
 from mgallery.services import process_image
 from mgallery.settings import GALLERY_PATH
 from mgallery.database import GalleryService, ImageService
-from mgallery.utils import get_logger
 
-logger = get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class Scanner:

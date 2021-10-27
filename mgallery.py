@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import argparse
 
 from mgallery.queue import queue
@@ -14,18 +15,11 @@ parser.add_argument(
     "-c", "--clean", action="store_true", default=False, help="Clean RQ queue"
 )
 parser.add_argument(
-    "-m",
-    "--merge",
+    "-f",
+    "--find",
     action="store_true",
     default=False,
-    help="Merge duplicate images (Dry run without `--delete` key)",
-)
-parser.add_argument(
-    "-d",
-    "--delete",
-    action="store_true",
-    default=False,
-    help="Delete duplicates from file system and database",
+    help="Find duplicate images",
 )
 parser.add_argument(
     "-s",
@@ -47,8 +41,8 @@ if __name__ == "__main__":
 
     if args.clean:
         queue.empty()
-    elif args.merge:
-        Merger().run(dry_run=not args.delete)
+    elif args.find:
+        Merger().run()
     elif args.scan is not None:
         Scanner(args.scan).run()
     else:

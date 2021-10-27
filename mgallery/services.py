@@ -1,11 +1,30 @@
-import os
+import logging
 from typing import Optional
 
-from mgallery.utils import extract_image_data
-from mgallery.database import ImageService, GalleryService
-from mgallery.utils import get_logger
+from imagehash import phash
+from PIL import Image
 
-logger = get_logger(__name__)
+from mgallery.database import ImageService, GalleryService
+
+logger = logging.getLogger(__name__)
+
+
+def extract_image_data(path: str) -> Optional[dict]:
+    result = {
+        "size": 0,
+        "width": None,
+        "height": None,
+        "phash": None,
+    }
+    try:
+        image = Image.open(path)
+        result["size"] = len(image.fp.read())
+        result["width"] = image.size[0]
+        result["height"] = image.size[1]
+        result["phash"] = str(phash(image))
+        return result
+    except Exception as e:
+        logger.error(e)
 
 
 def process_image(image_id: int) -> Optional[dict]:
@@ -17,13 +36,11 @@ def process_image(image_id: int) -> Optional[dict]:
 
     data = extract_image_data(image["path"])
     service.update(image_id=image["id"], **data)
-    logger.info(f"Successfully processed image with id {image_id}")
+    logger.debug(f"Successfully processed image with id {image_id}")
     return data
 
 
-def find_duplicates(
-    image_id: int, dry_run: bool = True, exclude: list = None
-) -> Optional[list]:
+def find_duplicates(image_id: int, exclude: list = None) -> Optional[list]:
     duplicates = []
     image_service = ImageService()
     image = image_service.get(image_id=image_id)
@@ -33,14 +50,14 @@ def find_duplicates(
         return
 
     if not all((image["phash"], image["width"], image["height"])):
-        logger.info(f"Skip image {image['path']} with empty pHash and size data")
+        logger.debug(f"Skip image {image['path']} with empty pHash and size data")
         return
 
     gallery_service = GalleryService()
     gallery = gallery_service.get(gallery_id=image["gallery_id"])
     for duplicate in image_service.list(exclude=exclude):
         if not all((duplicate["phash"], duplicate["width"], duplicate["height"])):
-            logger.info(
+            logger.debug(
                 f"Skip duplicate {duplicate['path']} with empty pHash and size data"
             )
             continue
@@ -52,9 +69,6 @@ def find_duplicates(
                 and image["height"] == duplicate["height"]
             ):
                 duplicates.append(duplicate)
-                if not dry_run:
-                    os.remove(duplicate["path"])
-                    image_service.delete(duplicate["id"])
 
     if len(duplicates) > 0:
         logger.info(

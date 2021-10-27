@@ -36,8 +36,8 @@ worker:
 scan:
 	python mgallery.py -s
 
-merge:
-	python mgallery.py -m
+find:
+	python mgallery.py -f
 
 check:
 	black --target-version py38 .
