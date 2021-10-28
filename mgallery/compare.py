@@ -1,13 +1,17 @@
 import gi
+import os
+import logging
 
 from humanize import naturalsize
 
-from mgallery.database import get_duplicates
+from mgallery.database import get_duplicates, delete_image
 from mgallery.settings import GALLERY_PATH
 
 gi.require_version("Gtk", "3.0")
 
 from gi.repository import Gtk, GdkPixbuf  # noqa
+
+logger = logging.getLogger(__name__)
 
 
 class DuplicatesWindow(Gtk.Window):
@@ -17,7 +21,7 @@ class DuplicatesWindow(Gtk.Window):
 
 
 class DuplicatesBox(Gtk.Box):
-    check_boxes = []
+    files_to_delete = []
 
     def __init__(self, images):
         super().__init__(orientation=Gtk.Orientation.VERTICAL, spacing=5)
@@ -52,14 +56,63 @@ class DuplicatesBox(Gtk.Box):
             grid.attach(attrs_label, index, image_box_height + 2, 1, 1)
 
             check_box = Gtk.CheckButton(label=f"delete")
+            check_box.connect("toggled", self.on_check_toggled, image['path'], image['name'])
             grid.attach(check_box, index, image_box_height + 3, 1, 1)
-            self.check_boxes.append(check_box)
 
         self.add(grid)
 
+    def on_check_toggled(self, check_box, path, name):
+        if check_box.get_active():
+            self.files_to_delete.append((path, name))
 
-def delete_images(button):
-    print("Clicked")
+
+class DuplicatesGrid(Gtk.Grid):
+    duplicates_boxes = []
+
+    def __init__(self, grouped_images):
+        super().__init__()
+
+        self.set_column_spacing(20)
+        self.set_row_spacing(10)
+        self.set_hexpand(True)
+
+        left = top = 0
+        for phash, images in grouped_images.items():
+            duplicates_box = DuplicatesBox(images)
+            self.attach(duplicates_box, left, top, 1, 1)
+            left += 1
+            if (left + 1) % 4 == 0:
+                left = 0
+                top += 1
+            self.duplicates_boxes.append(duplicates_box)
+
+
+class DuplicatesApp(Gtk.VBox):
+    def __init__(self, grouped_images):
+        super().__init__()
+
+        scrolled_window = Gtk.ScrolledWindow()
+        self.add(scrolled_window)
+
+        self.duplicates_grid = DuplicatesGrid(grouped_images)
+        scrolled_window.add(self.duplicates_grid)
+
+        buttons_grid = Gtk.Grid()
+        buttons_grid.set_column_spacing(10)
+        buttons_grid.set_row_spacing(10)
+
+        delete_button = Gtk.Button(label="Delete")
+        delete_button.connect("clicked", self.delete_images)
+        buttons_grid.attach(delete_button, 0, 0, 10, 1)
+
+        self.pack_start(buttons_grid, False, False, 10)
+
+    def delete_images(self, button):
+        # TODO: very strange behaviour
+        for path, name in self.duplicates_grid.duplicates_boxes[0].files_to_delete:
+            delete_image(path, name)
+            os.remove(f"{GALLERY_PATH}/{path}/{name}")
+            logger.info(f"{GALLERY_PATH}/{path}/{name} is deleted")
 
 
 async def build_image_compare_window(window: Gtk.Window):
@@ -67,39 +120,8 @@ async def build_image_compare_window(window: Gtk.Window):
     for image in await get_duplicates():
         grouped_images.setdefault(image["phash"], []).append(image)
 
-    action_box = Gtk.VBox()
-    scrolled_window = Gtk.ScrolledWindow()
-    action_box.add(scrolled_window)
-
-    buttons_grid = Gtk.Grid()
-    buttons_grid.set_column_spacing(10)
-    buttons_grid.set_row_spacing(10)
-
-    delete_button = Gtk.Button(label="Delete")
-    delete_button.connect("clicked", delete_images)
-    buttons_grid.attach(delete_button, 0, 0, 10, 1)
-
-    action_box.pack_start(buttons_grid, False, False, 10)
-
-    window.add(action_box)
-
-    images_grid = Gtk.Grid()
-    images_grid.set_column_spacing(20)
-    images_grid.set_row_spacing(10)
-    images_grid.set_hexpand(True)
-
-    left = top = 0
-    for phash, images in grouped_images.items():
-        duplicates_box = DuplicatesBox(images)
-        images_grid.attach(duplicates_box, left, top, 1, 1)
-        left += 1
-        if (left + 1) % 4 == 0:
-            left = 0
-            top += 1
-        if top == 10:
-            break
-
-    scrolled_window.add(images_grid)
+    duplicates_app = DuplicatesApp(grouped_images)
+    window.add(duplicates_app)
 
 
 async def run_compare(width: int = 1280, height: int = 720):

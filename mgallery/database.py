@@ -40,7 +40,7 @@ async def get_duplicates() -> Awaitable[list]:
 
 async def create_image(
     path: str,
-    name: str = None,
+    name: str,
     phash: str = None,
     size: int = None,
     width: int = None,
@@ -49,8 +49,21 @@ async def create_image(
     with sqlite3.connect(DATABASE_PATH) as connection:
         cursor = connection.cursor()
         cursor.execute(
-            "INSERT INTO image (path, name, phash, size, width, height) VALUES (?, ?, ?, ?, ?, ?)",
+            "INSERT INTO image (path, name, phash, size, width, height) VALUES (?, ?, ?, ?, ?, ?);",
             (path, name, phash, size, width, height),
         )
         connection.commit()
         return cursor.lastrowid
+
+
+def delete_image(
+    path: str,
+    name: str,
+) -> None:
+    with sqlite3.connect(DATABASE_PATH) as connection:
+        cursor = connection.cursor()
+        cursor.execute(
+            "DELETE FROM image WHERE path = ? AND name = ?;",
+            (path, name),
+        )
+        connection.commit()
