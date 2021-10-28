@@ -17,7 +17,7 @@ async def list_images() -> Awaitable[list]:
         return cursor.fetchall()
 
 
-async def get_duplicates(exclude: list = None) -> Awaitable[list]:
+async def get_duplicates() -> Awaitable[list]:
     with sqlite3.connect(DATABASE_PATH) as session:
         session.row_factory = dict_factory
         cursor = session.cursor()
@@ -28,7 +28,6 @@ async def get_duplicates(exclude: list = None) -> Awaitable[list]:
             JOIN (
               SELECT phash, COUNT(*)
               FROM image
-              WHERE name NOT IN ('{"','".join(exclude)}')
               GROUP BY phash
               HAVING COUNT(*) > 1
             ) b ON a.phash = b.phash

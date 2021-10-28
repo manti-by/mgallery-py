@@ -27,10 +27,13 @@ clean:
 scan:
 	python mgallery.py -s
 
-restart: clean setup scan
-
 report:
 	python mgallery.py -r
+
+compare:
+	python mgallery.py -c
+
+reload: clean setup scan report
 
 check:
 	black .

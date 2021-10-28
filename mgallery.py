@@ -2,6 +2,7 @@
 import argparse
 import asyncio
 
+from mgallery.compare import run_compare
 from mgallery.logger import setup_logger
 from mgallery.report import generate_report
 from mgallery.scanner import run_scanner
@@ -14,7 +15,7 @@ parser.add_argument(
     "-s",
     "--scan",
     action="store_true",
-    default=True,
+    default=False,
     help="Scan directory for images",
 )
 parser.add_argument(
@@ -23,6 +24,13 @@ parser.add_argument(
     action="store_true",
     default=False,
     help="Generate report for duplicated images",
+)
+parser.add_argument(
+    "-c",
+    "--compare",
+    action="store_true",
+    default=False,
+    help="Compare duplicated images",
 )
 parser.add_argument(
     "-v", "--verbose", action="count", default=0, help="Increase output verbosity"
@@ -40,5 +48,7 @@ if __name__ == "__main__":
         loop.run_until_complete(generate_report())
     elif args.scan:
         loop.run_until_complete(run_scanner())
+    elif args.compare:
+        loop.run_until_complete(run_compare())
     else:
         parser.print_help()

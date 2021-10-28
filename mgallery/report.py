@@ -17,7 +17,7 @@ async def generate_report() -> Awaitable:
     logger.info(f"Start report generation for {GALLERY_PATH}")
 
     grouped_images = {}
-    for image in await get_duplicates([]):
+    for image in await get_duplicates():
         grouped_images.setdefault(image["phash"], []).append(image)
 
     current_phash = None
