@@ -1,49 +1,44 @@
 #!/usr/bin/env python
 import argparse
+import asyncio
 
-from mgallery.queue import queue
-from mgallery.settings import GALLERY_PATH
-from mgallery.utils import setup_logging
-from mgallery.merger import Merger
-from mgallery.scanner import Scanner
+from mgallery.logger import setup_logger
+from mgallery.report import generate_report
+from mgallery.scanner import run_scanner
 
 parser = argparse.ArgumentParser(
     prog="python mgallery.py", description="Image deduplicate script.", add_help=True
 )
 
 parser.add_argument(
-    "-c", "--clean", action="store_true", default=False, help="Clean RQ queue"
-)
-parser.add_argument(
-    "-f",
-    "--find",
-    action="store_true",
-    default=False,
-    help="Find duplicate images",
-)
-parser.add_argument(
     "-s",
     "--scan",
-    dest="scan",
-    nargs="?",
-    const=GALLERY_PATH,
-    help="Scan gallery for images [PATH_TO_GALLERY]",
+    action="store_true",
+    default=True,
+    help="Scan directory for images",
 )
 parser.add_argument(
-    "-v", "--verbose", action="count", default=3, help="Increase output verbosity"
+    "-r",
+    "--report",
+    action="store_true",
+    default=False,
+    help="Generate report for duplicated images",
+)
+parser.add_argument(
+    "-v", "--verbose", action="count", default=0, help="Increase output verbosity"
 )
 
 
 if __name__ == "__main__":
     args = parser.parse_args()
+    setup_logger(args.verbose)
 
-    setup_logging(args.verbose)
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
 
-    if args.clean:
-        queue.empty()
-    elif args.find:
-        Merger().run()
-    elif args.scan is not None:
-        Scanner(args.scan).run()
+    if args.report:
+        loop.run_until_complete(generate_report())
+    elif args.scan:
+        loop.run_until_complete(run_scanner())
     else:
         parser.print_help()

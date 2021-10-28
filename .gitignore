@@ -4,10 +4,11 @@
 .venv/
 .pytest_cache/
 
+data/
+logs/
+
 db.sqlite
 *.log
 
 *.pyc
 *~
-
-photo/

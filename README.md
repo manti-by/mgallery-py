@@ -17,7 +17,7 @@ Source link: https://github.com/manti-by/mgallery/
 
 Requirements:
 
-    Python 3.9, Redis, ImageHash, Pillow
+    Python 3.9, ImageHash, Pillow
 
 
 Script setup
@@ -29,7 +29,6 @@ Script setup
 
         GALLERY_PATH=/home/ubuntu/mgallery/photo/
         DATABASE_PATH=/home/ubuntu/mgallery/db.sqlite
-        REDIS_URL=redis://localhost:6379/0
         DEBUG_LOG=/home/ubuntu/mgallery/debug.log
         ERROR_LOG=/home/ubuntu/mgallery/error.log
 
