@@ -15,12 +15,12 @@ endef
 
 export MIGRATION_SCRIPT
 setup:
-	sqlite3 /home/manti/www/mgallery/db.sqlite "$$MIGRATION_SCRIPT" && \
+	sqlite3 /home/manti/www/mgallery/mgallery-py/db.sqlite "$$MIGRATION_SCRIPT" && \
 	touch /home/manti/www/mgallery/logs/debug.log && \
 	touch /home/manti/www/mgallery/logs/error.log
 
 clean:
-	rm -rf /home/manti/www/mgallery/db.sqlite && \
+	rm -rf /home/manti/www/mgallery/mgallery-py/db.sqlite && \
 	rm -rf /home/manti/www/mgallery/logs/debug.log && \
 	rm -rf /home/manti/www/mgallery/logs/error.log
 

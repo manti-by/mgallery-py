@@ -3,7 +3,9 @@ import os
 
 GALLERY_PATH = os.getenv("GALLERY_PATH", "/home/manti/www/mgallery/data")
 
-DATABASE_PATH = os.getenv("DATABASE_PATH", "/home/manti/www/mgallery/db.sqlite")
+DATABASE_PATH = os.getenv(
+    "DATABASE_PATH", "/home/manti/www/mgallery/mgallery-py/db.sqlite"
+)
 
 LOGGING = {
     "version": 1,
@@ -39,8 +41,8 @@ LOGGING = {
     },
     "loggers": {
         "": {
-            "handlers": ["console", "debug_log", "error_log"],
-            "level": "DEBUG",
+            "handlers": ["console"],
+            "level": "WARNING",
             "propagate": True,
         }
     },

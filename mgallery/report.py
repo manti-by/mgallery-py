@@ -1,6 +1,5 @@
 import logging
 
-from typing import Awaitable
 from humanize import naturalsize
 
 from mgallery.settings import GALLERY_PATH
@@ -13,11 +12,11 @@ yellow = "\033[0;33m"
 reset = "\033[0m"
 
 
-async def generate_report() -> Awaitable:
+def generate_report():
     logger.info(f"Start report generation for {GALLERY_PATH}")
 
     grouped_images = {}
-    for image in await get_duplicates():
+    for image in get_duplicates():
         grouped_images.setdefault(image["phash"], []).append(image)
 
     current_phash = None

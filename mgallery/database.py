@@ -8,7 +8,7 @@ def dict_factory(cursor: sqlite3.Cursor, row: dict) -> dict:
     return {col[0]: row[idx] for idx, col in enumerate(cursor.description)}
 
 
-async def list_images() -> Awaitable[list]:
+def list_images() -> list:
     with sqlite3.connect(DATABASE_PATH) as session:
         session.row_factory = dict_factory
         cursor = session.cursor()
@@ -17,12 +17,12 @@ async def list_images() -> Awaitable[list]:
         return cursor.fetchall()
 
 
-async def get_duplicates() -> Awaitable[list]:
+def get_duplicates() -> list:
     with sqlite3.connect(DATABASE_PATH) as session:
         session.row_factory = dict_factory
         cursor = session.cursor()
         cursor.execute(
-            f"""
+            """
             SELECT a.*
             FROM image a
             JOIN (

@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import argparse
-import asyncio
 
 from mgallery.compare import run_compare
 from mgallery.logger import setup_logger
@@ -41,14 +40,11 @@ if __name__ == "__main__":
     args = parser.parse_args()
     setup_logger(args.verbose)
 
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-
     if args.report:
-        loop.run_until_complete(generate_report())
+        generate_report()
     elif args.scan:
-        loop.run_until_complete(run_scanner())
+        run_scanner()
     elif args.compare:
-        loop.run_until_complete(run_compare())
+        run_compare()
     else:
         parser.print_help()

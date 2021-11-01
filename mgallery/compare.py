@@ -33,7 +33,8 @@ class DuplicatesBox(Gtk.Box):
         grid.set_row_homogeneous(True)
         grid.set_column_homogeneous(True)
         for index, image in enumerate(images):
-            if ".gif" in image['name']:
+            # TODO: temporary disable gif support
+            if ".gif" in image["name"]:
                 continue
 
             pix_buf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
@@ -46,7 +47,9 @@ class DuplicatesBox(Gtk.Box):
             image_box_height = 7
             grid.attach(image_box, index, 0, 1, image_box_height)
 
-            attrs_label = Gtk.Label(label=f"{image['path'] or 'root'} / {image['name']}"[:20])
+            attrs_label = Gtk.Label(
+                label=f"{image['path'] or 'root'} / {image['name']}"[:20]
+            )
             attrs_label.set_alignment(0.05, 0)
             grid.attach(attrs_label, index, image_box_height + 1, 1, 1)
 
@@ -55,8 +58,10 @@ class DuplicatesBox(Gtk.Box):
             attrs_label.set_alignment(0.05, 0)
             grid.attach(attrs_label, index, image_box_height + 2, 1, 1)
 
-            check_box = Gtk.CheckButton(label=f"delete")
-            check_box.connect("toggled", self.on_check_toggled, image['path'], image['name'])
+            check_box = Gtk.CheckButton(label="delete")
+            check_box.connect(
+                "toggled", self.on_check_toggled, image["path"], image["name"]
+            )
             grid.attach(check_box, index, image_box_height + 3, 1, 1)
 
         self.add(grid)
@@ -115,9 +120,9 @@ class DuplicatesApp(Gtk.VBox):
             logger.info(f"{GALLERY_PATH}/{path}/{name} is deleted")
 
 
-async def build_image_compare_window(window: Gtk.Window):
+def build_image_compare_window(window: Gtk.Window):
     grouped_images = {}
-    for image in await get_duplicates():
+    for image in get_duplicates():
         grouped_images.setdefault(image["phash"], []).append(image)
 
     duplicates_app = DuplicatesApp(grouped_images)
@@ -127,7 +132,7 @@ async def build_image_compare_window(window: Gtk.Window):
 async def run_compare(width: int = 1280, height: int = 720):
     window = DuplicatesWindow()
     window.set_default_size(width, height)
-    await build_image_compare_window(window)
+    build_image_compare_window(window)
 
     window.connect("destroy", Gtk.main_quit)
     window.show_all()
