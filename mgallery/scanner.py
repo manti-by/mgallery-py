@@ -7,7 +7,7 @@ from concurrent import futures
 
 from typing import Awaitable
 
-from imagehash import phash
+from imagehash import dhash
 from PIL import Image
 
 from mgallery.settings import GALLERY_PATH
@@ -25,7 +25,7 @@ async def process_image(path: str, name: str) -> Awaitable[int]:
             size=len(image.fp.read()),
             width=image.size[0],
             height=image.size[1],
-            phash=str(phash(image)),
+            phash=str(dhash(image)),
         )
     except Exception as e:
         logger.error(e)
