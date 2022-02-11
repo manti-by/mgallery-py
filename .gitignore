@@ -6,6 +6,7 @@
 
 data/
 logs/
+venv/
 
 db.sqlite
 *.log
