@@ -22,17 +22,17 @@ async def get_duplicates() -> Awaitable[list]:
         session.row_factory = dict_factory
         cursor = session.cursor()
         cursor.execute(
-            f"""
-            SELECT a.*
-            FROM image a
-            JOIN (
-              SELECT phash, COUNT(*)
-              FROM image
-              GROUP BY phash
-              HAVING COUNT(*) > 1
-            ) b ON a.phash = b.phash
-            ORDER BY a.phash;
-        """
+            """
+                SELECT a.*
+                FROM image a
+                JOIN (
+                  SELECT phash, COUNT(*)
+                  FROM image
+                  GROUP BY phash
+                  HAVING COUNT(*) > 1
+                ) b ON a.phash = b.phash
+                ORDER BY a.phash;
+            """
         )
         session.commit()
         return cursor.fetchall()

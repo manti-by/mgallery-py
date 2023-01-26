@@ -12,7 +12,7 @@ from mgallery.database import create_image, list_images
 logger = logging.getLogger(__name__)
 
 
-async def get_images(ext: str) -> Awaitable[list]:
+async def get_images(ext: str) -> list[str]:
     return glob.glob(f"{GALLERY_PATH}/{ext}", recursive=True)
 
 
@@ -46,7 +46,7 @@ async def run_scanner():
         path = os.path.dirname(current_file).replace(GALLERY_PATH, "")[1:]
 
         # Skip images from the DB and all images in the gallery root
-        if f"{path}/{name}" not in existing_images and path:
+        if f"{path}/{name}" not in existing_images and path is not None:
             image_id = await process_image(path, name)
             if image_id is not None:
                 existing_images.append(f"{path}/{name}")

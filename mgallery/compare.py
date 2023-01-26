@@ -33,7 +33,7 @@ class DuplicatesBox(Gtk.Box):
         grid.set_row_homogeneous(True)
         grid.set_column_homogeneous(True)
         for index, image in enumerate(images):
-            if ".gif" in image['name']:
+            if ".gif" in image["name"]:
                 continue
 
             pix_buf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
@@ -46,7 +46,9 @@ class DuplicatesBox(Gtk.Box):
             image_box_height = 7
             grid.attach(image_box, index, 0, 1, image_box_height)
 
-            attrs_label = Gtk.Label(label=f"{image['path'] or 'root'} / {image['name']}"[:20])
+            attrs_label = Gtk.Label(
+                label=f"{image['path'] or 'root'} / {image['name']}"[:20]
+            )
             attrs_label.set_alignment(0.05, 0)
             grid.attach(attrs_label, index, image_box_height + 1, 1, 1)
 
@@ -55,8 +57,10 @@ class DuplicatesBox(Gtk.Box):
             attrs_label.set_alignment(0.05, 0)
             grid.attach(attrs_label, index, image_box_height + 2, 1, 1)
 
-            check_box = Gtk.CheckButton(label=f"delete")
-            check_box.connect("toggled", self.on_check_toggled, image['path'], image['name'])
+            check_box = Gtk.CheckButton(label="delete")
+            check_box.connect(
+                "toggled", self.on_check_toggled, image["path"], image["name"]
+            )
             grid.attach(check_box, index, image_box_height + 3, 1, 1)
 
         self.add(grid)

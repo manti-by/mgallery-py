@@ -1,14 +1,25 @@
-#.gitignore
-
+# PyCharm files
 .idea/
-.venv/
-.pytest_cache/
 
+# Virtual environments
+.env
+.venv/
+venv/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+.pytest_cache/
+*.py[cod]
+*$py.class
+
+# Pyenv
+.python-version
+
+# Media and other files
 data/
 logs/
 
 db.sqlite
 *.log
 
-*.pyc
 *~
