@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 import argparse
 import asyncio
-import sqlite3
 
 from mgallery.compare import run_compare
 from mgallery.logger import setup_logger
 from mgallery.report import generate_report
 from mgallery.scanner import run_scanner
-from mgallery.settings import DATABASE_PATH
 
 parser = argparse.ArgumentParser(
     prog="python mgallery.py", description="Image deduplicate script.", add_help=True
@@ -46,13 +44,11 @@ if __name__ == "__main__":
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
 
-    session = sqlite3.connect(DATABASE_PATH)
-
     if args.report:
-        loop.run_until_complete(generate_report(session))
+        loop.run_until_complete(generate_report())
     elif args.scan:
-        loop.run_until_complete(run_scanner(session))
+        loop.run_until_complete(run_scanner())
     elif args.compare:
-        loop.run_until_complete(run_compare(session))
+        loop.run_until_complete(run_compare())
     else:
         parser.print_help()
