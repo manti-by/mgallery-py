@@ -1,6 +1,4 @@
 pillow==9.4.0
-numpy==1.24.1
-scipy==1.10.0
 humanize==4.4.0
 aioredis==2.0.1
 hiredis==2.1.1

@@ -6,7 +6,6 @@ from memory_profiler import profile
 from mgallery.utils import binary_array_to_hex
 
 
-@profile
 def get_image_data(
     image_name: str, image_size: int = 32, hash_size: int = 8
 ) -> tuple[int, int, str]:

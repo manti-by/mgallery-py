@@ -5,8 +5,7 @@ import glob
 import logging
 import itertools
 
-from mgallery.scipy import get_image_data as get_image_data_scipy
-from mgallery.opencv import get_image_data as get_image_data_opencv
+from mgallery.phash import get_image_data
 from mgallery.settings import GALLERY_PATH
 from mgallery.database import create_image, get_images
 
@@ -20,23 +19,12 @@ async def scan_gallery(ext: str) -> list[str]:
 async def process_file(file: str, existing_images: list[str]):
     name = os.path.basename(file)
     path = os.path.dirname(file).replace(GALLERY_PATH, "")[1:]
-
-    # Skip images from the DB and all images in the gallery root
-    if f"{path}/{name}" not in existing_images and path is not None:
+    if f"{path}/{name}" not in existing_images:
         try:
-            width, height, image_hash = get_image_data_scipy(
-                f"{GALLERY_PATH}/{path}/{name}"
-            )
-            width, height, image_hash = get_image_data_opencv(
-                f"{GALLERY_PATH}/{path}/{name}"
-            )
+            width, height, image_hash = get_image_data(f"{GALLERY_PATH}/{path}/{name}")
+            size = os.path.getsize(f"{GALLERY_PATH}/{path}/{name}")
             await create_image(
-                path=path,
-                name=name,
-                phash=image_hash,
-                width=width,
-                height=height,
-                size=os.path.getsize(f"{GALLERY_PATH}/{path}/{name}"),
+                path=path, name=name, phash=image_hash, width=width, height=height, size=size
             )
             logger.info(f"Processed {path}/{name}")
         except Exception as e:
@@ -48,7 +36,6 @@ async def run_scanner():
 
     extensions = ("**/*.jpg", "**/*.jpeg", "**/*.png", "**/*.gif")
     existing_images = [f"{x['path']}/{x['name']}" for x in await get_images()]
-    existing_images = []
 
     files = await asyncio.gather(*[scan_gallery(ext) for ext in extensions])
     await asyncio.gather(
