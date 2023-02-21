@@ -2,7 +2,7 @@
 exclude =
     .git,
     .venv,
-    .idea.
+    .idea,
     __pycache__
 max-line-length = 120
 max-complexity = 14

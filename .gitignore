@@ -3,12 +3,11 @@
 .idea/
 .venv/
 .pytest_cache/
+.python-version
 
 data/
 logs/
-venv/
 
-db.sqlite
 *.log
 
 *.pyc

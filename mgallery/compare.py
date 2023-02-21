@@ -24,7 +24,7 @@ class DuplicatesWindow(Gtk.Window):
 class DuplicatesBox(Gtk.Box):
     files_to_delete = []
 
-    def __init__(self, images):
+    def __init__(self, images: list):
         super().__init__(orientation=Gtk.Orientation.VERTICAL, spacing=5)
         self.set_homogeneous(True)
 
@@ -89,7 +89,7 @@ class DuplicatesBox(Gtk.Box):
 class DuplicatesGrid(Gtk.Grid):
     duplicates_boxes = []
 
-    def __init__(self, duplicates):
+    def __init__(self, duplicates: dict):
         super().__init__()
 
         self.set_column_spacing(5)
@@ -108,7 +108,7 @@ class DuplicatesGrid(Gtk.Grid):
 
 
 class DuplicatesApp(Gtk.VBox):
-    def __init__(self, duplicates):
+    def __init__(self, duplicates: dict):
         super().__init__()
 
         scrolled_window = Gtk.ScrolledWindow()
@@ -129,7 +129,7 @@ class DuplicatesApp(Gtk.VBox):
 
         self.database = Database()
 
-    def delete_images(self, button):
+    def delete_images(self, button: Gtk.Button):
         for path, name in self.duplicates_grid.duplicates_boxes[0].files_to_delete:
             self.database.delete(path, name)
             file_name = f"{GALLERY_PATH}/{path}/{name}"

@@ -5,7 +5,7 @@ Image deduplication app
 About
 ----
 
-Image deduplicate script.
+Image deduplicate script and GTK app to compare.
 
 [![Python 3.11](https://img.shields.io/badge/python-3.11-green.svg)](https://www.python.org/downloads/release/python-3111/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
@@ -19,7 +19,7 @@ Rust mirror: https://github.com/manti-by/mgallery-rust/
 
 Requirements:
 
-    Python 3.11, NumPy, OpenCV
+    Python 3.11, OpenCV, Redis, GTK
 
 
 Script setup
@@ -30,9 +30,8 @@ Script setup
 2. Set appropriate environment variables:
 
    ```bash
+   export REDIS_URL=redis://127.0.0.1:6379/5
    export GALLERY_PATH=/home/ubuntu/app/data/
-   export DEBUG_LOG=/home/ubuntu/app/logs/debug.log
-   export ERROR_LOG=/home/ubuntu/app/logs/error.log
    ```
 
 3. Scan gallery and compare duplicates
