@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 import argparse
 
-from mgallery.compare import run_compare
-from mgallery.logger import setup_logger
-from mgallery.report import generate_report
-from mgallery.scanner import run_scanner
+import logging.config
+
+from mgallery.settings import LOGGING
+
+logging.config.dictConfig(LOGGING)
 
 parser = argparse.ArgumentParser(
     prog="python mgallery.py", description="Image deduplicate script.", add_help=True
@@ -18,33 +19,23 @@ parser.add_argument(
     help="Scan directory for images",
 )
 parser.add_argument(
-    "-r",
-    "--report",
-    action="store_true",
-    default=False,
-    help="Generate report for duplicated images",
-)
-parser.add_argument(
     "-c",
     "--compare",
     action="store_true",
     default=False,
     help="Compare duplicated images",
 )
-parser.add_argument(
-    "-v", "--verbose", action="count", default=0, help="Increase output verbosity"
-)
 
 
 if __name__ == "__main__":
     args = parser.parse_args()
-    setup_logger(args.verbose)
+    if args.scan:
+        from mgallery.scanner import run_scanner
 
-    if args.report:
-        generate_report()
-    elif args.scan:
         run_scanner()
     elif args.compare:
+        from mgallery.compare import run_compare
+
         run_compare()
     else:
         parser.print_help()

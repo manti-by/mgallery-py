@@ -1,69 +1,50 @@
-import sqlite3
-from typing import Awaitable
+import json
+from collections import defaultdict
 
-from mgallery.settings import DATABASE_PATH
+import redis
 
-
-def dict_factory(cursor: sqlite3.Cursor, row: dict) -> dict:
-    return {col[0]: row[idx] for idx, col in enumerate(cursor.description)}
+from mgallery.settings import REDIS_URL
 
 
-def list_images() -> list:
-    with sqlite3.connect(DATABASE_PATH) as session:
-        session.row_factory = dict_factory
-        cursor = session.cursor()
-        cursor.execute("SELECT * FROM image")
-        session.commit()
-        return cursor.fetchall()
+class Database:
+    def __init__(self):
+        self.client = redis.from_url(REDIS_URL)
 
+    def get(self, key: str) -> dict:
+        return json.loads(self.client.get(key))
 
-def get_duplicates() -> list:
-    with sqlite3.connect(DATABASE_PATH) as session:
-        session.row_factory = dict_factory
-        cursor = session.cursor()
-        cursor.execute(
-            """
-            SELECT a.*
-            FROM image a
-            JOIN (
-              SELECT phash, COUNT(*)
-              FROM image
-              GROUP BY phash
-              HAVING COUNT(*) > 1
-            ) b ON a.phash = b.phash
-            ORDER BY a.phash;
-        """
+    def all(self, pattern: str = "*") -> list:
+        return [self.get(key) for key in self.client.keys(pattern)]
+
+    def duplicates(self) -> dict[str, list]:
+        duplicates = defaultdict(list)
+        for item in self.all():
+            if item["phash"]:
+                duplicates[item["phash"]].append(item)
+        return {k: v for k, v in duplicates.items() if len(v) > 1}
+
+    def create(
+        self,
+        path: str,
+        name: str,
+        phash: str = None,
+        width: int = None,
+        height: int = None,
+        size: int = None,
+    ):
+        key = f"{phash}-{path}/{name}"
+        value = json.dumps(
+            {
+                "path": path,
+                "name": name,
+                "phash": phash,
+                "width": width,
+                "height": height,
+                "size": size,
+            }
         )
-        session.commit()
-        return cursor.fetchall()
+        self.client.set(key, value)
 
-
-async def create_image(
-    path: str,
-    name: str,
-    phash: str = None,
-    size: int = None,
-    width: int = None,
-    height: int = None,
-) -> Awaitable[int]:
-    with sqlite3.connect(DATABASE_PATH) as connection:
-        cursor = connection.cursor()
-        cursor.execute(
-            "INSERT INTO image (path, name, phash, size, width, height) VALUES (?, ?, ?, ?, ?, ?);",
-            (path, name, phash, size, width, height),
-        )
-        connection.commit()
-        return cursor.lastrowid
-
-
-def delete_image(
-    path: str,
-    name: str,
-) -> None:
-    with sqlite3.connect(DATABASE_PATH) as connection:
-        cursor = connection.cursor()
-        cursor.execute(
-            "DELETE FROM image WHERE path = ? AND name = ?;",
-            (path, name),
-        )
-        connection.commit()
+    def delete(self, path: str, name: str):
+        for key in self.client.keys(f"*{path}/{name}"):
+            self.client.delete(key)
