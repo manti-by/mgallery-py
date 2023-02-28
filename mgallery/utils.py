@@ -12,6 +12,6 @@ def binary_array_to_hex(binary_array: list, hash_size: int = 8) -> str:
 def get_gallery_file_list(recursive: bool = True) -> list:
     """Return files in the gallery recursively."""
     files = []
-    for ext in ("**/*.jpg", "**/*.jpeg", "**/*.png", "**/*.gif"):
+    for ext in ("**/*.jpg", "**/*.jpeg", "**/*.png", "**/*.gif", "**/*.mp4"):
         files.extend(glob.glob(f"{GALLERY_PATH}/{ext}", recursive=recursive))
     return files

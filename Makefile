@@ -14,8 +14,11 @@ scan:
 compare:
 	python mgallery.py -c
 
-resort:
+rename:
 	python mgallery.py -r
+
+resort:
+	python mgallery.py -t
 
 check:
 	black .

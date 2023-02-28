@@ -27,10 +27,17 @@ parser.add_argument(
 )
 parser.add_argument(
     "-r",
+    "--rename",
+    action="store_true",
+    default=False,
+    help="Rename images in the current directory",
+)
+parser.add_argument(
+    "-t",
     "--resort",
     action="store_true",
     default=False,
-    help="Resort/rename images in the current directory",
+    help="Resort images in the current directory",
 )
 
 if __name__ == "__main__":
@@ -43,6 +50,10 @@ if __name__ == "__main__":
         from mgallery.compare import run_compare
 
         run_compare()
+    elif args.rename:
+        from mgallery.rename import run_rename
+
+        run_rename()
     elif args.resort:
         from mgallery.resort import run_resort
 
