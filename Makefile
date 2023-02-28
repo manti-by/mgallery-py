@@ -14,6 +14,9 @@ scan:
 compare:
 	python mgallery.py -c
 
+resort:
+	python mgallery.py -r
+
 check:
 	black .
 	flake8 .

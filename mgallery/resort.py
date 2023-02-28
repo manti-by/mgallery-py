@@ -1,9 +1,10 @@
-from pathlib import Path
+import os
 
 import exifread
 import logging
 
 from datetime import datetime
+from pathlib import Path
 
 from mgallery.date_re import DATE_PARSERS
 from mgallery.utils import get_gallery_file_list
@@ -34,23 +35,23 @@ def run_resort():
     for file_name in get_gallery_file_list():
         try:
             logger.info(f"Processing file {file_name}")
-
             date_time = get_datetime_from_exif(file_name)
+
             if date_time is None:
                 logger.warning(" - exif read failed, trying file name patterns")
                 date_time = get_datetime_from_filename(file_name)
 
             if date_time is None:
-                logger.error(" - file name pattern not matched, skipping")
-                continue
+                logger.warning(" - file name pattern not matched, using mtime")
+                date_time = datetime.fromtimestamp(os.path.getmtime(file_name))
 
             counter = 0
             file_info = Path(file_name)
-            target_name = f"{date_time.__format__('%Y-%m-%d_%H-%M-%S')}{file_info.suffix}"
-            target_file_name = file_info.parent / f"{target_name}"
+            target_name = f"{date_time.__format__('%Y-%m-%d_%H-%M-%S')}"
+            target_file_name = file_info.parent / f"{target_name}{file_info.suffix}"
             while target_file_name.exists():
                 counter += 1
-                target_name = f"{date_time.__format__('%Y-%m-%d_%H-%M-%S')}-{counter}{file_info.suffix}"
+                target_name = f"{target_name}-{counter}{file_info.suffix}"
                 target_file_name = file_info.parent / f"{target_name}"
 
             file_info.rename(target_file_name)
