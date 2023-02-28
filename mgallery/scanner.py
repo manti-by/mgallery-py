@@ -1,5 +1,4 @@
 import os
-import glob
 import logging
 
 from concurrent import futures
@@ -7,14 +6,13 @@ from concurrent import futures
 from mgallery.image import process_image_list
 from mgallery.settings import GALLERY_PATH
 from mgallery.database import Database
+from mgallery.utils import get_gallery_file_list
 
 logger = logging.getLogger(__name__)
 
 
 def get_file_chunks(num_cores: int = os.cpu_count()) -> list[list[str]]:
-    files = []
-    for ext in ("**/*.jpg", "**/*.jpeg", "**/*.png", "**/*.gif"):
-        files.extend(glob.glob(f"{GALLERY_PATH}/{ext}", recursive=True))
+    files = get_gallery_file_list()
     chunk_size = len(files) // num_cores + 1
     return [files[i : i + chunk_size] for i in range(len(files))[::chunk_size]]  # noqa
 

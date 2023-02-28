@@ -25,7 +25,13 @@ parser.add_argument(
     default=False,
     help="Compare duplicated images",
 )
-
+parser.add_argument(
+    "-r",
+    "--resort",
+    action="store_true",
+    default=False,
+    help="Resort/rename images in the current directory",
+)
 
 if __name__ == "__main__":
     args = parser.parse_args()
@@ -37,5 +43,9 @@ if __name__ == "__main__":
         from mgallery.compare import run_compare
 
         run_compare()
+    elif args.resort:
+        from mgallery.resort import run_resort
+
+        run_resort()
     else:
         parser.print_help()
