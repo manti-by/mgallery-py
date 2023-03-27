@@ -1,7 +1,7 @@
 numpy==1.24.2
 opencv-python==4.7.0.68
 humanize==4.4.0
-redis==4.5.1
+redis==4.5.3
 exifread==3.0.0
 
 pycairo==1.23.0
