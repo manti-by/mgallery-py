@@ -51,7 +51,9 @@ def run_rename():
             target_file_name = file_info.parent / f"{target_name}{file_info.suffix}"
             while target_file_name.exists():
                 counter += 1
-                target_file_name = file_info.parent / f"{target_name}-{counter}{file_info.suffix}"
+                target_file_name = (
+                    file_info.parent / f"{target_name}-{counter}{file_info.suffix}"
+                )
 
             file_info.rename(target_file_name)
             logger.info(" - file is renamed")

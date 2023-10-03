@@ -6,6 +6,7 @@ from gi.repository.GLib import GError
 from humanize import naturalsize
 
 from mgallery.database import Database
+from mgallery.image import create_thumbnail
 from mgallery.settings import GALLERY_PATH
 
 gi.require_version("Gtk", "3.0")
@@ -38,14 +39,18 @@ class DuplicatesBox(Gtk.Box):
                 continue
 
             try:
+                thumbnail = create_thumbnail(image["path"], image["name"])
                 pix_buf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
-                    f"{GALLERY_PATH}/{image['path']}/{image['name']}",
-                    width=260,
-                    height=180,
+                    thumbnail,
+                    width=128,
+                    height=128,
                     preserve_aspect_ratio=True,
                 )
             except GError:
                 logger.warning(f"Can't open an image {image['path']}/{image['name']}")
+                continue
+            except Exception as e:
+                logger.error(e)
                 continue
 
             image_box_height = 7
@@ -109,6 +114,8 @@ class DuplicatesGrid(Gtk.Grid):
 
 class DuplicatesApp(Gtk.VBox):
     def __init__(self, duplicates: dict):
+        logger.info(f"Compare {len(duplicates)} images")
+
         super().__init__()
 
         scrolled_window = Gtk.ScrolledWindow()

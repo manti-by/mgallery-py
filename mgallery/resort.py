@@ -26,7 +26,7 @@ def get_path_from_filename(file_name: str) -> tuple[str, str, Path]:
     return (
         f"{target_datetime.year} {season}",
         target_datetime.strftime("%Y-%m-%d"),
-        file_info
+        file_info,
     )
 
 
@@ -43,7 +43,9 @@ def run_resort():
             target_file_name = target_directory / f"{file_info.stem}{file_info.suffix}"
             while target_file_name.exists():
                 counter += 1
-                target_file_name = target_directory / f"{file_info.stem}-{counter}{file_info.suffix}"
+                target_file_name = (
+                    target_directory / f"{file_info.stem}-{counter}{file_info.suffix}"
+                )
 
             file_info.rename(target_file_name)
             logger.info(" - file is moved")

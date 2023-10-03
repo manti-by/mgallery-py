@@ -70,6 +70,6 @@ DATE_PARSERS = {
     ): date_compiler_03,
     # IMG_20140803_075125
     re.compile(
-        r"(IMG|VID)_(?P<year>\d{4})(?P<month>\d{2})(?P<day>\d{2})_(?P<hours>\d{2})(?P<minutes>\d{2})(?P<seconds>\d{2}).*"
+        r"(IMG|VID)_(?P<year>\d{4})(?P<month>\d{2})(?P<day>\d{2})_(?P<hours>\d{2})(?P<minutes>\d{2})(?P<seconds>\d{2}).*"  # noqa
     ): date_compiler_04,
 }

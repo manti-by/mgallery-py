@@ -13,6 +13,8 @@ logger = logging.getLogger(__name__)
 
 def get_file_chunks(num_cores: int = os.cpu_count()) -> list[list[str]]:
     files = get_gallery_file_list()
+    logger.info(f"Found {len(files)} files")
+
     chunk_size = len(files) // num_cores + 1
     return [files[i : i + chunk_size] for i in range(len(files))[::chunk_size]]  # noqa
 

@@ -27,9 +27,11 @@ Script setup
 
 1. Create virtualenv and install packages from requirements file.
 
-2. Set appropriate environment variables:
+2. Install libraw and set appropriate environment variables:
 
    ```bash
+   sudo apt install libraw-dev
+   
    export REDIS_URL=redis://127.0.0.1:6379/5
    export GALLERY_PATH=/home/ubuntu/app/data/
    ```
