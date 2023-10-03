@@ -23,3 +23,6 @@ resort:
 check:
 	black .
 	flake8 .
+
+update-requirements:
+	pcu requirements.txt -u
