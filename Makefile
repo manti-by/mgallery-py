@@ -8,6 +8,9 @@ setup:
 	touch $$CURRENT_DIR/logs/debug.log && \
 	touch $$CURRENT_DIR/logs/error.log
 
+dump:
+	python mgallery.py -d
+
 scan:
 	python mgallery.py -s
 
