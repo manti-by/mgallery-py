@@ -13,10 +13,10 @@ gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, GdkPixbuf  # noqa
 
 logger = logging.getLogger(__name__)
+files_to_delete = set()
 
 
 class DuplicatesBox(Gtk.Box):
-    files_to_delete = set()
 
     def __init__(self, images: list):
         super().__init__(orientation=Gtk.Orientation.VERTICAL, spacing=5)
@@ -78,13 +78,12 @@ class DuplicatesBox(Gtk.Box):
 
     def on_check_toggled(self, check_box, path, name):
         if check_box.get_active():
-            self.files_to_delete.add((path, name))
+            files_to_delete.add((path, name))
         else:
-            self.files_to_delete.remove((path, name))
+            files_to_delete.remove((path, name))
 
 
 class DuplicatesGrid(Gtk.Grid):
-    duplicates_boxes = []
 
     def __init__(self, duplicates: dict):
         super().__init__()
@@ -100,11 +99,9 @@ class DuplicatesGrid(Gtk.Grid):
             if (left + 1) % 4 == 0:
                 left = 0
                 top += 1
-            self.duplicates_boxes.append(duplicates_box)
 
 
 class DuplicatesApp(Gtk.VBox):
-    duplicate_grids = []
 
     def __init__(self, database: Database, duplicates: dict):
         super().__init__()
@@ -123,42 +120,36 @@ class DuplicatesApp(Gtk.VBox):
             end = start + self.page_size
             duplicates_slice = dict(list(self.duplicates.items())[start:end])
             duplicates_grid = DuplicatesGrid(duplicates_slice)
-            self.duplicate_grids.append(duplicates_grid)
             self.stack.add_titled(duplicates_grid, f"page-{page}", f"{page}")
         self.add(self.stack)
 
-        self.buttons_grid = Gtk.Grid(column_spacing=10, row_spacing=10)
+        buttons_grid = Gtk.Grid(column_spacing=10, row_spacing=10)
 
-        self.delete_button = Gtk.Button(label="Delete")
-        self.delete_button.connect("clicked", self.delete_images)
-        self.buttons_grid.attach(self.delete_button, 0, 0, 10, 1)
+        delete_button = Gtk.Button(label="Delete")
+        delete_button.connect("clicked", self.delete_images)
+        buttons_grid.attach(delete_button, 0, 0, 10, 1)
 
-        self.spacer_label = Gtk.Label()
-        self.spacer_label.set_hexpand(True)
-        self.buttons_grid.attach(self.spacer_label, 20, 0, 20, 1)
+        spacer_label = Gtk.Label()
+        spacer_label.set_hexpand(True)
+        buttons_grid.attach(spacer_label, 20, 0, 20, 1)
 
-        self.prev_page_button = Gtk.Button(label="<< Prev")
-        self.prev_page_button.connect("clicked", self.prev_page)
-        self.buttons_grid.attach(self.prev_page_button, 50, 0, 10, 1)
+        prev_page_button = Gtk.Button(label="<< Prev")
+        prev_page_button.connect("clicked", self.prev_page)
+        buttons_grid.attach(prev_page_button, 50, 0, 10, 1)
 
         self.pagination_label = Gtk.Label()
         self.pagination_label.set_text(f"{self.current_page} / {self.total_pages}")
         self.pagination_label.set_justify(Gtk.Justification.CENTER)
-        self.buttons_grid.attach(self.pagination_label, 60, 0, 5, 1)
+        buttons_grid.attach(self.pagination_label, 60, 0, 5, 1)
 
-        self.next_page_button = Gtk.Button(label="Next >>")
-        self.next_page_button.connect("clicked", self.next_page)
-        self.buttons_grid.attach(self.next_page_button, 75, 0, 10, 1)
-        self.pack_start(self.buttons_grid, False, False, 0)
+        next_page_button = Gtk.Button(label="Next >>")
+        next_page_button.connect("clicked", self.next_page)
+        buttons_grid.attach(next_page_button, 75, 0, 10, 1)
+
+        self.pack_start(buttons_grid, False, False, 0)
 
     def delete_images(self, button: Gtk.Button):
-        files_to_delete = []
-        for duplicate_grid in self.duplicate_grids:
-            for duplicates_box in duplicate_grid.duplicates_boxes:
-                for path, name in duplicates_box.files_to_delete:
-                    files_to_delete.append((path, name))
-
-        for path, name in list(set(files_to_delete)):
+        for path, name in files_to_delete:
             self.database.delete(path, name)
 
             thumbnail_name = f"{THUMBNAILS_PATH}/{path}/{name}.jpg"
