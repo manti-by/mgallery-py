@@ -16,9 +16,18 @@ def get_datetime_from_exif(name: str) -> datetime | None:
     with open(name, "rb") as f:
         exif_tags = exifread.process_file(f)
         if "EXIF DateTimeOriginal" in exif_tags:
-            return datetime.strptime(
-                str(exif_tags["EXIF DateTimeOriginal"]), "%Y:%m:%d %H:%M:%S"
-            )
+            try:
+                return datetime.strptime(
+                    str(exif_tags["EXIF DateTimeOriginal"]), "%Y:%m:%d %H:%M:%S"
+                )
+            except ValueError as e:
+                logger.warning(e)
+            try:
+                return datetime.strptime(
+                    str(exif_tags["EXIF DateTimeOriginal"]), "%Y:%m:%d %H:%M:%S.%f"
+                )
+            except Exception as e:
+                logger.warning(e)
 
 
 def get_datetime_from_filename(name: str) -> datetime | None:

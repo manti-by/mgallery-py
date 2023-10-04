@@ -42,10 +42,10 @@ def process_rgb_image(database: Database, path: str, name: str, size: int):
 
 def process_image(database: Database, path: str, name: str):
     size = os.path.getsize(f"{GALLERY_PATH}/{path}/{name}")
-    if name.split(".")[-1] != "ARW":
-        process_rgb_image(database, path, name, size)
-    else:
+    if name.split(".")[-1].lower() in ("arw", "dng"):
         process_raw_image(database, path, name, size)
+    else:
+        process_rgb_image(database, path, name, size)
 
 
 def create_thumbnail(path: str, name: str, size: int = 128, force: bool = False) -> str:
@@ -55,11 +55,11 @@ def create_thumbnail(path: str, name: str, size: int = 128, force: bool = False)
         return thumbnail
 
     os.makedirs(f"{THUMBNAILS_PATH}/{path}", exist_ok=True)
-    if name.split(".")[-1] != "ARW":
-        image = Image.open(source)
-    else:
+    if name.split(".")[-1].lower() in ("arw", "dng"):
         with rawpy.imread(source) as raw:
             image = Image.fromarray(raw.postprocess())
+    else:
+        image = Image.open(source)
 
     image.thumbnail((size, size))
     image.save(thumbnail, quality=80, optimize=True)
