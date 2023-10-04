@@ -6,8 +6,7 @@ from gi.repository.GLib import GError
 from humanize import naturalsize
 
 from mgallery.database import Database
-from mgallery.image import create_thumbnail
-from mgallery.settings import GALLERY_PATH
+from mgallery.settings import GALLERY_PATH, THUMBNAILS_PATH
 
 gi.require_version("Gtk", "3.0")
 
@@ -17,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 class DuplicatesBox(Gtk.Box):
-    files_to_delete = []
+    files_to_delete = set()
 
     def __init__(self, images: list):
         super().__init__(orientation=Gtk.Orientation.VERTICAL, spacing=5)
@@ -31,9 +30,8 @@ class DuplicatesBox(Gtk.Box):
                 continue
 
             try:
-                thumbnail = create_thumbnail(image["path"], image["name"])
                 pix_buf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
-                    thumbnail,
+                    f"{THUMBNAILS_PATH}/{image['path']}/{image['name']}.jpg",
                     width=128,
                     height=128,
                     preserve_aspect_ratio=True,
@@ -59,13 +57,13 @@ class DuplicatesBox(Gtk.Box):
             grid.attach(label, index, image_box_height + 1, 1, 1)
 
             label = Gtk.Label()
-            label_text = image["path"] or "root"
+            label_text = image["path"][-30:] or "root"
             label.set_markup(f"<span size='medium'><b>{label_text}</b></span>")
             label.set_alignment(0, 0.05)
             grid.attach(label, index, image_box_height + 2, 1, 1)
 
             label = Gtk.Label()
-            label_text = image["name"][:50]
+            label_text = image["name"][-30:]
             label.set_markup(f"<span size='small'>{label_text}</span>")
             label.set_alignment(0, 0.05)
             grid.attach(label, index, image_box_height + 3, 1, 1)
@@ -80,7 +78,9 @@ class DuplicatesBox(Gtk.Box):
 
     def on_check_toggled(self, check_box, path, name):
         if check_box.get_active():
-            self.files_to_delete.append((path, name))
+            self.files_to_delete.add((path, name))
+        else:
+            self.files_to_delete.remove((path, name))
 
 
 class DuplicatesGrid(Gtk.Grid):
@@ -97,20 +97,22 @@ class DuplicatesGrid(Gtk.Grid):
             duplicates_box = DuplicatesBox(images)
             self.attach(duplicates_box, left, top, 1, 1)
             left += 1
-            if (left + 1) % 5 == 0:
+            if (left + 1) % 4 == 0:
                 left = 0
                 top += 1
             self.duplicates_boxes.append(duplicates_box)
 
 
 class DuplicatesApp(Gtk.VBox):
+    duplicate_grids = []
+
     def __init__(self, database: Database, duplicates: dict):
         super().__init__()
 
         self.database = database
         self.duplicates = duplicates
 
-        self.page_size = 12
+        self.page_size = 9
         self.current_page = 1
         self.total_pages = len(duplicates) // self.page_size + 1
 
@@ -121,6 +123,7 @@ class DuplicatesApp(Gtk.VBox):
             end = start + self.page_size
             duplicates_slice = dict(list(self.duplicates.items())[start:end])
             duplicates_grid = DuplicatesGrid(duplicates_slice)
+            self.duplicate_grids.append(duplicates_grid)
             self.stack.add_titled(duplicates_grid, f"page-{page}", f"{page}")
         self.add(self.stack)
 
@@ -149,17 +152,33 @@ class DuplicatesApp(Gtk.VBox):
         self.pack_start(self.buttons_grid, False, False, 0)
 
     def delete_images(self, button: Gtk.Button):
-        for path, name in self.duplicates_grid.duplicates_boxes[0].files_to_delete:
+        files_to_delete = []
+        for duplicate_grid in self.duplicate_grids:
+            for duplicates_box in duplicate_grid.duplicates_boxes:
+                for path, name in duplicates_box.files_to_delete:
+                    files_to_delete.append((path, name))
+
+        for path, name in list(set(files_to_delete)):
             self.database.delete(path, name)
+
+            thumbnail_name = f"{THUMBNAILS_PATH}/{path}/{name}.jpg"
+            if os.path.exists(thumbnail_name):
+                os.remove(thumbnail_name)
+
             file_name = f"{GALLERY_PATH}/{path}/{name}"
             if os.path.exists(file_name):
                 os.remove(file_name)
                 logger.info(f"{file_name} is deleted")
                 continue
+
             logger.error(f"Can't find a file {file_name}")
 
     def next_page(self, *args):
-        self.current_page = self.total_pages if self.current_page == self.total_pages else self.current_page + 1
+        self.current_page = (
+            self.total_pages
+            if self.current_page == self.total_pages
+            else self.current_page + 1
+        )
         self.pagination_label.set_text(f"{self.current_page} / {self.total_pages}")
         self.stack.set_visible_child_name(f"page-{self.current_page}")
 
@@ -174,7 +193,9 @@ def run_compare(width: int = 1200, height: int = 800):
     duplicates = database.duplicates()
     logger.info(f"Compare {len(duplicates)} images")
 
-    window = Gtk.Window(title="Duplicated Images", default_width=width, default_height=height)
+    window = Gtk.Window(
+        title="Duplicated Images", default_width=width, default_height=height
+    )
     window.set_border_width(20)
 
     app = DuplicatesApp(database, duplicates)

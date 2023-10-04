@@ -13,7 +13,10 @@ def get_duplicates_chunks(num_cores: int = os.cpu_count()) -> list[dict[str, dic
     logger.info(f"Found {len(duplicates)} duplicates")
 
     chunk_size = len(duplicates) // num_cores + 1
-    return [dict(list(duplicates.items())[i : i + chunk_size]) for i in range(len(duplicates))[::chunk_size]]  # noqa
+    return [
+        dict(list(duplicates.items())[i : i + chunk_size])
+        for i in range(len(duplicates))[::chunk_size]
+    ]  # noqa
 
 
 def create_thumbnails(duplicates: dict, process_index: int):
@@ -29,7 +32,9 @@ def create_thumbnails(duplicates: dict, process_index: int):
                 continue
 
             if (counter := counter + 1) % 500 == 0:
-                logger.info(f"Processed {counter} thumbnails in thread #{process_index}")
+                logger.info(
+                    f"Processed {counter} thumbnails in thread #{process_index}"
+                )
 
 
 def run_thumbnails(num_cores: int = os.cpu_count()):
@@ -37,9 +42,7 @@ def run_thumbnails(num_cores: int = os.cpu_count()):
     with futures.ProcessPoolExecutor(max_workers=num_cores) as executor:
         processes = []
         for i in range(num_cores):
-            processes.append(
-                executor.submit(create_thumbnails, duplicates_chunks, i)
-            )
+            processes.append(executor.submit(create_thumbnails, duplicates_chunks, i))
 
     for _ in futures.as_completed(processes):
         """Wait while all processes will be completed"""
