@@ -16,12 +16,6 @@ from gi.repository import Gtk, GdkPixbuf  # noqa
 logger = logging.getLogger(__name__)
 
 
-class DuplicatesWindow(Gtk.Window):
-    def __init__(self):
-        super().__init__(title="Duplicated Images")
-        self.set_border_width(20)
-
-
 class DuplicatesBox(Gtk.Box):
     files_to_delete = []
 

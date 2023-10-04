@@ -12,7 +12,7 @@ def binary_array_to_hex(binary_array: list, hash_size: int = 8) -> str:
 def get_gallery_file_list(recursive: bool = True) -> list:
     """Return files in the gallery recursively."""
     files = []
-    for ext in ("**/*.arw", "**/*.jpg", "**/*.jpeg", "**/*.png", "**/*.gif"):
+    for ext in ("**/*.arw", "**/*.dng", "**/*.jpg", "**/*.jpeg", "**/*.png", "**/*.gif"):
         files.extend(glob.glob(f"{GALLERY_PATH}/{ext.upper()}", recursive=recursive))
         files.extend(glob.glob(f"{GALLERY_PATH}/{ext.lower()}", recursive=recursive))
     return files

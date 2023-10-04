@@ -25,18 +25,29 @@ Requirements:
 Script setup
 ----
 
-1. Create virtualenv and install packages from requirements file.
+1. Set appropriate environment variables:
 
-2. Install libraw and set appropriate environment variables:
+    ```bash
+    export REDIS_URL=redis://127.0.0.1:6379/5
+    export GALLERY_PATH=/home/ubuntu/app/data/
+    export DEBUG_LOG=/home/ubuntu/app/logs/debug.log
+    export ERROR_LOG=/home/ubuntu/app/logs/error.log
+    ```
 
-   ```bash
-   sudo apt install libraw-dev
+2. Install necessary libraries
+
+    ```bash
+    sudo apt install -y pkg-config python3-dev libraw-dev
+    sudo apt install -y python3-gi python3-gi-cairo gir1.2-gtk-3.0 libgirepository1.0-dev gcc libcairo2-dev
+    ```
+
+3. Setup environment and install packages from requirements file:
+
+    ```bash
+    pip3 install -r requirements.txt
+    ```
    
-   export REDIS_URL=redis://127.0.0.1:6379/5
-   export GALLERY_PATH=/home/ubuntu/app/data/
-   ```
-
-3. Scan gallery and compare duplicates
+4. Scan gallery and compare duplicates
 
    ```bash
    make setup
