@@ -33,11 +33,18 @@ parser.add_argument(
     help="Rename images in the current directory",
 )
 parser.add_argument(
-    "-t",
+    "-o",
     "--resort",
     action="store_true",
     default=False,
     help="Resort images in the current directory",
+)
+parser.add_argument(
+    "-t",
+    "--thumbnails",
+    action="store_true",
+    default=False,
+    help="Create thumbnails for duplicated images",
 )
 
 if __name__ == "__main__":
@@ -58,5 +65,10 @@ if __name__ == "__main__":
         from mgallery.resort import run_resort
 
         run_resort()
+
+    elif args.thumbnails:
+        from mgallery.thumbnails import run_thumbnails
+
+        run_thumbnails()
     else:
         parser.print_help()

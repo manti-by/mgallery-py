@@ -18,6 +18,9 @@ rename:
 	python mgallery.py -r
 
 resort:
+	python mgallery.py -o
+
+thumbnails:
 	python mgallery.py -t
 
 check:
