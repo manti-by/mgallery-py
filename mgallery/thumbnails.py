@@ -7,6 +7,7 @@ logger = logging.getLogger(__name__)
 
 
 def run_thumbnails():
+    counter = 0
     for _, images in Database().duplicates().items():
         for image in images:
             if ".gif" in image["name"]:
@@ -16,3 +17,6 @@ def run_thumbnails():
             except Exception as e:
                 logger.error(e)
                 continue
+
+            if (counter := counter + 1) % 500 == 0:
+                logger.info(f"Created {counter} thumbnails")

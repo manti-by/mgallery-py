@@ -12,6 +12,13 @@ parser = argparse.ArgumentParser(
 )
 
 parser.add_argument(
+    "-d",
+    "--dump",
+    action="store_true",
+    default=False,
+    help="Create db dump",
+)
+parser.add_argument(
     "-s",
     "--scan",
     action="store_true",
@@ -49,6 +56,10 @@ parser.add_argument(
 
 if __name__ == "__main__":
     args = parser.parse_args()
+    if args.dump:
+        from mgallery.dump import run_dump
+
+        run_dump()
     if args.scan:
         from mgallery.scanner import run_scanner
 
