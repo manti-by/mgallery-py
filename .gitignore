@@ -8,6 +8,8 @@
 data/
 logs/
 
+dump.json
+
 *.log
 
 *.pyc

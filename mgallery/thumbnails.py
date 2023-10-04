@@ -1,4 +1,6 @@
 import logging
+import os
+from concurrent import futures
 
 from mgallery.database import Database
 from mgallery.image import create_thumbnail
@@ -6,9 +8,17 @@ from mgallery.image import create_thumbnail
 logger = logging.getLogger(__name__)
 
 
-def run_thumbnails():
+def get_duplicates_chunks(num_cores: int = os.cpu_count()) -> list[dict[str, dict]]:
+    duplicates = Database().duplicates()
+    logger.info(f"Found {len(duplicates)} duplicates")
+
+    chunk_size = len(duplicates) // num_cores + 1
+    return [dict(list(duplicates.items())[i : i + chunk_size]) for i in range(len(duplicates))[::chunk_size]]  # noqa
+
+
+def create_thumbnails(duplicates: dict, process_index: int):
     counter = 0
-    for _, images in Database().duplicates().items():
+    for _, images in duplicates.items():
         for image in images:
             if ".gif" in image["name"]:
                 continue
@@ -19,4 +29,18 @@ def run_thumbnails():
                 continue
 
             if (counter := counter + 1) % 500 == 0:
-                logger.info(f"Created {counter} thumbnails")
+                logger.info(f"Processed {counter} thumbnails in thread #{process_index}")
+
+
+def run_thumbnails(num_cores: int = os.cpu_count()):
+    duplicates_chunks = get_duplicates_chunks(num_cores=num_cores)
+    with futures.ProcessPoolExecutor(max_workers=num_cores) as executor:
+        processes = []
+        for i in range(num_cores):
+            processes.append(
+                executor.submit(create_thumbnails, duplicates_chunks, i)
+            )
+
+    for _ in futures.as_completed(processes):
+        """Wait while all processes will be completed"""
+    logger.info("All threads are completed")
