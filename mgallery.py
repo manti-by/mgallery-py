@@ -60,7 +60,7 @@ if __name__ == "__main__":
         from mgallery.dump import run_dump
 
         run_dump()
-    if args.scan:
+    elif args.scan:
         from mgallery.scanner import run_scanner
 
         run_scanner()
