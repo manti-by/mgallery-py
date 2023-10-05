@@ -1,4 +1,3 @@
-import os
 import logging
 
 from concurrent import futures
@@ -11,7 +10,7 @@ from mgallery.utils import get_gallery_file_list
 logger = logging.getLogger(__name__)
 
 
-def get_file_chunks(num_cores: int = os.cpu_count()) -> list[list[str]]:
+def get_file_chunks(num_cores: int = NUM_PROCESSES) -> list[list[str]]:
     files = get_gallery_file_list()
     logger.info(f"Found {len(files)} files")
 

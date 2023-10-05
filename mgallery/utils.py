@@ -1,6 +1,6 @@
 from setuptools import glob
 
-from mgallery.settings import GALLERY_PATH
+from mgallery.settings import GALLERY_PATH, FILE_TYPES
 
 
 def binary_array_to_hex(binary_array: list, hash_size: int = 8) -> str:
@@ -12,7 +12,7 @@ def binary_array_to_hex(binary_array: list, hash_size: int = 8) -> str:
 def get_gallery_file_list(recursive: bool = True) -> list:
     """Return files in the gallery recursively."""
     files = []
-    for ext in ("**/*.arw", "**/*.dng", "**/*.jpg", "**/*.jpeg", "**/*.png", "**/*.webp", "**/*.gif"):
+    for ext in (f"**/*.{ext}" for ext in FILE_TYPES):
         files.extend(glob.glob(f"{GALLERY_PATH}/{ext.upper()}", recursive=recursive))
         files.extend(glob.glob(f"{GALLERY_PATH}/{ext.lower()}", recursive=recursive))
     return files

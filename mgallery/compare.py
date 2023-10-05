@@ -17,7 +17,6 @@ files_to_delete = set()
 
 
 class DuplicatesBox(Gtk.Box):
-
     def __init__(self, images: list):
         super().__init__(orientation=Gtk.Orientation.VERTICAL, spacing=5)
         self.set_homogeneous(True)
@@ -84,7 +83,6 @@ class DuplicatesBox(Gtk.Box):
 
 
 class DuplicatesGrid(Gtk.Grid):
-
     def __init__(self, duplicates: dict):
         super().__init__()
 
@@ -102,12 +100,13 @@ class DuplicatesGrid(Gtk.Grid):
 
 
 class DuplicatesApp(Gtk.VBox):
-
     def __init__(self, database: Database, duplicates: dict):
         super().__init__()
 
         self.database = database
-        self.duplicates = dict(sorted(duplicates.items(), key=lambda item: len(item[1]), reverse=True))
+        self.duplicates = dict(
+            sorted(duplicates.items(), key=lambda item: len(item[1]), reverse=True)
+        )
 
         self.page_size = 9
         self.current_page = 1

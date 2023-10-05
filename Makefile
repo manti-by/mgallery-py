@@ -1,12 +1,11 @@
-CURRENT_DIR = $(shell pwd)
-
-export CURRENT_DIR
-setup:
+flush-db:
 	redis-cli -n 5 FLUSHALL
-	rm -rf $$CURRENT_DIR/logs/ && \
-	mkdir -p $$CURRENT_DIR/logs/ && \
-	touch $$CURRENT_DIR/logs/debug.log && \
-	touch $$CURRENT_DIR/logs/error.log
+
+make-dirs:
+	sudo mkdir -p /var/mgallery/thumbnails && \
+	sudo chown manti:manti /var/mgallery/thumbnails
+
+setup: flush-db make-dirs
 
 dump:
 	python mgallery.py -d

@@ -1,5 +1,4 @@
 import logging
-import os
 from concurrent import futures
 
 from mgallery.database import Database
@@ -9,15 +8,15 @@ from mgallery.settings import NUM_PROCESSES
 logger = logging.getLogger(__name__)
 
 
-def get_duplicates_chunks(num_cores: int = os.cpu_count()) -> list[dict[str, dict]]:
+def get_duplicates_chunks(num_cores: int = NUM_PROCESSES) -> list[dict[str, dict]]:
     duplicates = Database().duplicates()
     logger.info(f"Found {len(duplicates)} duplicates")
 
     chunk_size = len(duplicates) // num_cores + 1
     return [
-        dict(list(duplicates.items())[i : i + chunk_size])
+        dict(list(duplicates.items())[i : i + chunk_size])  # noqa
         for i in range(len(duplicates))[::chunk_size]
-    ]  # noqa
+    ]
 
 
 def create_thumbnails(duplicates: dict, process_index: int):
@@ -43,7 +42,9 @@ def run_thumbnails(num_cores: int = NUM_PROCESSES):
     with futures.ProcessPoolExecutor(max_workers=num_cores) as executor:
         processes = []
         for i in range(num_cores):
-            processes.append(executor.submit(create_thumbnails, duplicates_chunks[i], i))
+            processes.append(
+                executor.submit(create_thumbnails, duplicates_chunks[i], i)
+            )
 
     for _ in futures.as_completed(processes):
         """Wait while all processes will be completed"""
