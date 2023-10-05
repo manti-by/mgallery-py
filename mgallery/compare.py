@@ -107,11 +107,14 @@ class DuplicatesApp(Gtk.VBox):
         super().__init__()
 
         self.database = database
-        self.duplicates = duplicates
+        self.duplicates = dict(sorted(duplicates.items(), key=lambda item: len(item[1]), reverse=True))
 
         self.page_size = 9
         self.current_page = 1
         self.total_pages = len(duplicates) // self.page_size + 1
+
+        scrolled_window = Gtk.ScrolledWindow()
+        self.add(scrolled_window)
 
         self.stack = Gtk.Stack()
         self.stack.set_border_width(10)
@@ -121,7 +124,8 @@ class DuplicatesApp(Gtk.VBox):
             duplicates_slice = dict(list(self.duplicates.items())[start:end])
             duplicates_grid = DuplicatesGrid(duplicates_slice)
             self.stack.add_titled(duplicates_grid, f"page-{page}", f"{page}")
-        self.add(self.stack)
+
+        scrolled_window.add(self.stack)
 
         buttons_grid = Gtk.Grid(column_spacing=10, row_spacing=10)
 

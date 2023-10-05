@@ -4,7 +4,7 @@ import logging
 from concurrent import futures
 
 from mgallery.image import process_image_list
-from mgallery.settings import GALLERY_PATH
+from mgallery.settings import GALLERY_PATH, NUM_PROCESSES
 from mgallery.database import Database
 from mgallery.utils import get_gallery_file_list
 
@@ -19,7 +19,7 @@ def get_file_chunks(num_cores: int = os.cpu_count()) -> list[list[str]]:
     return [files[i : i + chunk_size] for i in range(len(files))[::chunk_size]]  # noqa
 
 
-def run_scanner(num_cores: int = os.cpu_count()):
+def run_scanner(num_cores: int = NUM_PROCESSES):
     logger.info(f"Start scanning {GALLERY_PATH}")
 
     existing_items = Database().all()
