@@ -12,6 +12,13 @@ parser = argparse.ArgumentParser(
 )
 
 parser.add_argument(
+    "-a",
+    "--autodelete",
+    action="store_true",
+    default=False,
+    help="Auto delete duplicates",
+)
+parser.add_argument(
     "-d",
     "--dump",
     action="store_true",
@@ -56,7 +63,11 @@ parser.add_argument(
 
 if __name__ == "__main__":
     args = parser.parse_args()
-    if args.dump:
+    if args.autodelete:
+        from mgallery.autodelete import run_autodelete
+
+        run_autodelete()
+    elif args.dump:
         from mgallery.dump import run_dump
 
         run_dump()

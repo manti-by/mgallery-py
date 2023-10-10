@@ -7,6 +7,9 @@ make-dirs:
 
 setup: flush-db make-dirs
 
+autodelete:
+	python mgallery.py -a
+
 dump:
 	python mgallery.py -d
 

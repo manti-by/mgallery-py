@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_image_phash(
-    image: numpy.ndarray, image_size: int = 32, hash_size: int = 8
+    image: numpy.ndarray, image_size: int = 24, hash_size: int = 6
 ) -> str | None:
     """
     Perceptual Hash computation.
